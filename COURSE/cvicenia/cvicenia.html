@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MATLAB — Cvičenia 1 a 2</title>
+<style>
+  :root{
+    --navy:#0A2540;
+    --blue:#0072BD;
+    --orange:#D95319;
+    --gray:#F4F4F4;
+    --textgray:#5C5C5C;
+    --border:#E2E2E2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:"Segoe UI",Lato,system-ui,-apple-system,sans-serif;
+    color:#1a1a1a;
+    background:#fff;
+    line-height:1.6;
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:28px 32px 24px;
+    border-bottom:4px solid var(--orange);
+  }
+  header h1{margin:0 0 6px;font-size:28px;font-weight:600;letter-spacing:-.01em}
+  header p{margin:0;color:#c9d4de;font-size:15px}
+  main{max-width:960px;margin:0 auto;padding:28px 24px 60px}
+  .howto{
+    background:var(--gray);
+    border-left:4px solid var(--blue);
+    padding:14px 18px;
+    margin:0 0 24px;
+    font-size:14.5px;
+  }
+  .howto b{color:var(--navy)}
+  .controls{display:flex;gap:10px;margin:0 0 28px;flex-wrap:wrap}
+  .controls button{
+    font:inherit;font-size:14px;
+    background:#fff;color:var(--navy);
+    border:1.5px solid var(--blue);
+    border-radius:6px;padding:7px 14px;cursor:pointer;
+  }
+  .controls button:hover{background:var(--blue);color:#fff}
+  h2{
+    font-size:22px;color:var(--navy);margin:38px 0 4px;
+    padding-bottom:8px;border-bottom:3px solid var(--orange);
+  }
+  h2 .sub{display:block;font-size:14px;font-weight:400;color:var(--textgray);margin-top:4px}
+  h3{
+    font-size:16px;color:var(--blue);margin:28px 0 12px;
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+  .task{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:14px 16px;
+    margin:0 0 12px;
+    background:#fff;
+  }
+  .task > .q{display:flex;gap:12px;align-items:flex-start}
+  .num{
+    flex:0 0 auto;
+    background:var(--orange);color:#fff;
+    font-size:12.5px;font-weight:600;
+    border-radius:5px;padding:2px 8px;margin-top:2px;
+    font-family:Consolas,"Courier New",monospace;
+  }
+  .q p{margin:0}
+  .hint{display:block;color:var(--textgray);font-size:13.5px;margin-top:5px}
+  .hint code{background:var(--gray);padding:1px 5px;border-radius:3px}
+  code{font-family:Consolas,"Courier New",monospace;font-size:13.5px}
+  details{margin-top:12px}
+  summary{
+    cursor:pointer;color:var(--blue);font-size:14px;font-weight:600;
+    list-style:none;display:inline-flex;align-items:center;gap:6px;
+    user-select:none;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸";font-size:12px;transition:transform .15s}
+  details[open] summary::before{transform:rotate(90deg)}
+  summary:hover{color:var(--orange)}
+  pre{
+    margin:10px 0 0;padding:11px 14px;border-radius:6px;
+    font-family:Consolas,"Courier New",monospace;font-size:13px;
+    line-height:1.5;overflow-x:auto;white-space:pre;
+  }
+  pre.code{background:var(--gray);border:1px solid var(--border);color:#111}
+  pre.out{background:var(--navy);color:#eaeef2;border:1px solid var(--navy)}
+  pre.out::before{
+    content:"výstup";display:block;color:#7f96ab;font-size:11px;
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+  }
+  .note{
+    background:#FDF3EE;border-left:3px solid var(--orange);
+    padding:9px 13px;margin-top:10px;font-size:14px;border-radius:0 4px 4px 0;
+  }
+  footer{
+    border-top:1px solid var(--border);margin-top:44px;padding-top:16px;
+    color:var(--textgray);font-size:13px;text-align:center;
+  }
+  @media print{
+    .controls{display:none}
+    details{open:true}
+    .task{break-inside:avoid;border-color:#ccc}
+    header{background:#fff;color:#000;border-bottom:3px solid #000}
+    header p{color:#333}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>MATLAB — Cvičenia</h1>
+  <p>Stredná priemyselná škola elektrotechnická, Karola Adlera 5</p>
+</header>
+
+<main>
+
+<div class="howto">
+  <b>Ako pracovať s cvičeniami:</b> Najprv skús úlohu vyriešiť sám priamo v MATLABe.
+  Riešenie si zobrazíš kliknutím na <b>Ukázať riešenie</b> — ale až potom, čo si to naozaj skúsil.
+  Rovnaké úlohy nájdeš aj v súboroch <code>cvicenie_01.m</code> a <code>cvicenie_02.m</code>,
+  kam môžeš písať priamo v MATLABe.
+</div>
+
+<div class="controls">
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Rozbaliť všetky riešenia</button>
+  <button onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Zbaliť všetky riešenia</button>
+</div>
+
+<!-- ============ LEKCIA 1 ============ -->
+<h2>Lekcia 1 — Úvod do MATLABu a dátové typy
+  <span class="sub">Premenné, priraďovanie, dátové typy, rozsahy a saturácia, znaky, relačné výrazy</span>
+</h2>
+
+<h3>A · Premenné a priraďovanie</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Vytvor premenné <code>a = 12</code> a <code>b = 5</code>. Vypočítaj a vypíš ich súčet, rozdiel, súčin a podiel.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">a = 12;
+b = 5;
+sucet   = a + b
+rozdiel = a - b
+sucin   = a * b
+podiel  = a / b</pre>
+<pre class="out">sucet =
+    17
+rozdiel =
+     7
+sucin =
+    60
+podiel =
+    2.4000</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Vytvor premennú <code>c</code> s hodnotou 100 tak, aby sa jej hodnota <b>nevypísala</b>. Potom ju vypíš tak, že napíšeš len jej meno.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">c = 100;   % bodkočiarka potlačí výpis
+c          % samotné meno premennej ju vypíše</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Napíš výraz <code>7 * 6</code> bez priradenia do premennej. Do akej premennej sa výsledok uložil? Pripočítaj k nej 1.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">7 * 6      % výsledok sa uloží do premennej ans
+ans + 1</pre>
+<pre class="out">ans =
+    42
+ans =
+    43</pre>
+<div class="note">Premenná <code>ans</code> sa prepíše pri každom ďalšom nepriradenom výraze — nespoliehaj sa na ňu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A4</span><div>
+<p>Vypočítaj obsah kruhu s polomerom 3.<span class="hint">Pomoc: <code>obsah = pi * r^2</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">r = 3;
+obsah = pi * r^2</pre>
+<pre class="out">obsah =
+   28.2743</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A5</span><div>
+<p>Postupne vykonaj: <code>x = 5</code>, potom <code>x = x + 3</code>, potom <code>x = x * 2</code>. Najprv odhadni výsledok, až potom spusti.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">x = 5;
+x = x + 3;   % x je teraz 8
+x = x * 2    % x je teraz 16</pre>
+<div class="note"><code>x = x + 3</code> nie je rovnica — vezme starú hodnotu, pripočíta 3 a uloží späť.</div>
+</details></div>
+
+<h3>B · Dátové typy</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Zisti typ (triedu) hodnôt: <code>5</code>, <code>5.5</code>, <code>'a'</code>, <code>"ahoj"</code>, <code>true</code>, <code>int8(5)</code>.<span class="hint">Pomoc: funkcia <code>class</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">class(5)
+class(5.5)
+class('a')
+class("ahoj")
+class(true)
+class(int8(5))</pre>
+<pre class="out">'double'
+'double'
+'char'
+'string'
+'logical'
+'int8'</pre>
+<div class="note">Všimni si: <code>5</code> aj <code>5.5</code> sú <code>double</code> — MATLAB nemá zvlášť typ pre celé čísla, pokiaľ si ho nevypýtaš.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Zisti najmenšie a najväčšie číslo, ktoré sa zmestí do typu <code>int16</code>.<span class="hint">Pomoc: <code>intmin</code>, <code>intmax</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">intmin('int16')
+intmax('int16')</pre>
+<pre class="out">ans =
+  int16
+   -32768
+ans =
+  int16
+   32767</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B3</span><div>
+<p>Čo vráti <code>int8(150)</code>? A čo <code>uint8(-3)</code>? Vysvetli prečo.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">int8(150)
+uint8(-3)</pre>
+<pre class="out">ans =
+  int8
+   127
+ans =
+  uint8
+   0</pre>
+<div class="note"><b>Saturačná aritmetika:</b> hodnota sa nezmestí, tak sa oreže na najbližšiu hranicu rozsahu. V jazyku C by sa „pretočila“ na druhú stranu — MATLAB to nerobí, aby nevznikali tiché chyby.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B4</span><div>
+<p>Vytvor tri premenné typu <code>double</code>, <code>int8</code> a <code>logical</code>. Zisti, koľko bajtov každá zaberá.<span class="hint">Pomoc: <code>whos</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">p1 = 5;
+p2 = int8(5);
+p3 = true;
+whos p1 p2 p3</pre>
+<pre class="out">  Name      Size      Bytes  Class
+
+  p1        1x1           8  double
+  p2        1x1           1  int8
+  p3        1x1           1  logical</pre>
+<div class="note">Tá istá hodnota 5 zaberá ako <code>double</code> osemkrát viac pamäte než ako <code>int8</code>. Pri veľkých dátach je to zásadný rozdiel.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B5</span><div>
+<p>Zisti číslo znaku <code>'M'</code> v kódovaní a naopak znak s číslom 77. Ešte zisti číslo znaku <code>'z'</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">double('M')
+char(77)
+double('z')</pre>
+<pre class="out">ans =
+    77
+ans =
+    'M'
+ans =
+   122</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B6</span><div>
+<p>Posuň písmená slova <code>'abc'</code> o 3 miesta v kódovaní (má vyjsť <code>'def'</code>).</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">char('abc' + 3)</pre>
+<pre class="out">ans =
+    'def'</pre>
+<div class="note">So znakmi sa dá počítať ako s číslami — MATLAB ich pri výpočte automaticky prevedie na ich číselné hodnoty.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B7</span><div>
+<p>Je výraz <code>'A' &lt; 'a'</code> pravdivý? Zisti čísla oboch znakov a vysvetli prečo.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">'A' &lt; 'a'
+double('A')
+double('a')</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+    65
+ans =
+    97</pre>
+<div class="note">Veľké písmená majú v kódovaní nižšie čísla (65–90) než malé (97–122), preto je <code>'A' &lt; 'a'</code> pravda.</div>
+</details></div>
+
+<h3>C · Výrazy, formát a vstavané funkcie</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Zobraz podiel <code>22/7</code> najprv s 15 desatinnými miestami a potom so 4.<span class="hint">Pomoc: <code>format long</code> / <code>format short</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">format long
+22/7
+format short
+22/7</pre>
+<pre class="out">ans =
+   3.142857142857143
+ans =
+    3.1429</pre>
+<div class="note"><code>format</code> mení len <b>zobrazenie</b>, nie uloženú hodnotu — v pamäti je číslo stále rovnako presné.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Vypočítaj súčet čísel 1 až 8 tak, že výraz rozdelíš na dva riadky.<span class="hint">Pomoc: tri bodky <code>...</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sucet_dlhy = 1 + 2 + 3 + 4 + ...
+             5 + 6 + 7 + 8</pre>
+<pre class="out">sucet_dlhy =
+    36</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C3</span><div>
+<p>Zaokrúhli číslo <code>-3.6</code> štyrmi spôsobmi: <code>round</code>, <code>floor</code>, <code>ceil</code>, <code>fix</code>. V čom sa líšia?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">round(-3.6)   % na najbližšie celé
+floor(-3.6)   % vždy nadol
+ceil(-3.6)    % vždy nahor
+fix(-3.6)     % smerom k nule</pre>
+<pre class="out">ans =
+    -4
+ans =
+    -4
+ans =
+    -3
+ans =
+    -3</pre>
+<div class="note">Pri záporných číslach sa <code>floor</code> a <code>fix</code> líšia: <code>floor</code> ide nadol (−4), <code>fix</code> k nule (−3).</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C4</span><div>
+<p>Vypočítaj zvyšok po delení 100 siedmimi (<code>rem</code> aj <code>mod</code>). Potom vyskúšaj <code>rem(-7,3)</code> a <code>mod(-7,3)</code>. Prečo sú výsledky rozdielne?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rem(100,7)
+mod(100,7)
+rem(-7,3)
+mod(-7,3)</pre>
+<pre class="out">ans =
+     2
+ans =
+     2
+ans =
+    -1
+ans =
+     2</pre>
+<div class="note">Pri kladných číslach dávajú rovnaký výsledok. Pri záporných sa líšia: <code>rem</code> preberá znamienko deleného čísla, <code>mod</code> znamienko deliteľa.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C5</span><div>
+<p>Vypočítaj: 5. odmocninu z 32, <code>log10(1000)</code>, <code>exp(2)</code> a <code>sqrt(144)</code>.<span class="hint">Pomoc: <code>nthroot</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">nthroot(32,5)
+log10(1000)
+exp(2)
+sqrt(144)</pre>
+<pre class="out">ans =
+     2
+ans =
+     3
+ans =
+    7.3891
+ans =
+    12</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C6</span><div>
+<p>Preveď 90 stupňov na radiány a over, že výsledok je <code>pi/2</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">deg2rad(90)
+pi/2</pre>
+<pre class="out">ans =
+    1.5708
+ans =
+    1.5708</pre>
+</details></div>
+
+<h3>D · Relačné a logické výrazy</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Otestuj výrazy: <code>7 &gt; 3</code>, <code>7 == 7.0</code>, <code>'b' &gt; 'a'</code>. Potom ulož výsledok prvého do premennej a zisti jej typ.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">7 &gt; 3
+7 == 7.0
+'b' &gt; 'a'
+vysledok = 7 &gt; 3;
+class(vysledok)</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+  logical
+   1
+ans =
+  logical
+   1
+ans =
+    'logical'</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Napíš výraz, ktorý je pravdivý práve vtedy, keď <code>x</code> leží v intervale ⟨10, 20⟩. Vyskúšaj pre <code>x = 15</code> aj <code>x = 25</code>.</p>
+<span class="hint">Pozor: zápis <code>10 &lt;= x &lt;= 20</code> je chyba — vieš prečo?</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">x = 15;
+x &gt;= 10 &amp;&amp; x &lt;= 20     % správne
+
+x = 25;
+x &gt;= 10 &amp;&amp; x &lt;= 20</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+  logical
+   0</pre>
+<div class="note"><b>Prečo je <code>10 &lt;= x &lt;= 20</code> zlé:</b> vyhodnocuje sa zľava doprava. Najprv sa vyhodnotí <code>10 &lt;= x</code>, čo dá <code>1</code> alebo <code>0</code> — a potom sa porovnáva <code>1 &lt;= 20</code>, čo je <b>vždy</b> pravda. Výraz by teda platil pre akékoľvek <code>x</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Otestuj, či platí <code>0.1 + 0.2 == 0.3</code>. Prekvapil ťa výsledok? Vypočítaj <code>0.1 + 0.2 - 0.3</code>. Ako by si tieto dve čísla porovnal správne?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">0.1 + 0.2 == 0.3
+0.1 + 0.2 - 0.3
+abs((0.1+0.2) - 0.3) &lt; 1e-10</pre>
+<pre class="out">ans =
+  logical
+   0
+ans =
+   5.5511e-17
+ans =
+  logical
+   1</pre>
+<div class="note"><b>Zaokrúhľovacia chyba:</b> desatinné čísla sa v počítači ukladajú približne. Preto sa nikdy neporovnávajú cez <code>==</code>, ale tak, že sa overí, či je ich rozdiel dostatočne malý.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D4</span><div>
+<p>Vyskúšaj logické operátory: <code>xor(true,false)</code>, <code>xor(true,true)</code>, <code>~(3 &gt; 5)</code>, <code>(3 &lt; 5) &amp;&amp; (2 &gt; 1)</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">xor(true, false)   % práve jedno platí -> pravda
+xor(true, true)    % platia obe -> nepravda
+~(3 &gt; 5)           % negácia nepravdy -> pravda
+(3 &lt; 5) &amp;&amp; (2 &gt; 1) % obe platia -> pravda</pre>
+<pre class="out">1
+0
+1
+1</pre>
+</details></div>
+
+<h3>E · Ukladanie premenných</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Vytvor tri ľubovoľné premenné a ulož ich do súboru <code>mojedata</code>. Potom ich vymaž z pamäte, over cez <code>who</code>, že tam nie sú, a načítaj ich späť.<span class="hint">Pomoc: <code>save</code>, <code>clear</code>, <code>who</code>, <code>load</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">prem1 = 10;
+prem2 = [1 2 3];
+prem3 = 'test';
+save mojedata prem1 prem2 prem3
+clear prem1 prem2 prem3
+who                  % premenné už neexistujú
+load mojedata
+who                  % a sú späť</pre>
+<div class="note">Súbor sa uloží do <b>aktuálneho priečinka</b> (Current Folder) s príponou <code>.mat</code>.</div>
+</details></div>
+
+<!-- ============ LEKCIA 2 ============ -->
+<h2>Lekcia 2 — Vektory a matice
+  <span class="sub">Vytváranie, rozmery, indexovanie, prvkové vs. maticové operácie, logické indexovanie, sústavy rovníc</span>
+</h2>
+
+<h3>A · Vytváranie vektorov a matíc</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Vytvor vektor <code>[2 4 6 8 10]</code> tromi rôznymi spôsobmi: vypísaním hodnôt, operátorom dvojbodky a funkciou <code>linspace</code>. Over cez <code>isequal</code>, že sú naozaj rovnaké.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">v1 = [2 4 6 8 10]
+v2 = 2:2:10
+v3 = linspace(2,10,5)
+isequal(v1,v2,v3)</pre>
+<pre class="out">v1 =
+     2     4     6     8    10
+v2 =
+     2     4     6     8    10
+v3 =
+     2     4     6     8    10
+ans =
+  logical
+   1</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Vytvor klesajúcu postupnosť od 20 do 0 s krokom 5. Potom vytvor postupnosť <code>6, 5, 4, 3, 2, 1, 0, -1</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">k = 20:-5:0
+p = 6:-1:-1</pre>
+<pre class="out">k =
+    20    15    10     5     0
+p =
+     6     5     4     3     2     1     0    -1</pre>
+<div class="note">Krok môže byť záporný — vtedy ide postupnosť zostupne.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Vytvor vektor 11 rovnomerne rozložených hodnôt od 0 do 1.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">d = linspace(0,1,11)</pre>
+<pre class="out">d =
+        0   0.1000   0.2000   0.3000   0.4000   0.5000
+   0.6000   0.7000   0.8000   0.9000   1.0000</pre>
+<div class="note">Ak sa výpis nezmestí na šírku okna, MATLAB ho rozdelí a označí ako <code>Columns 1 through 6</code> atď.</div>
+<div class="note">Pozor na rozdiel: <code>linspace(0,1,11)</code> určuje <b>počet hodnôt</b>, kým <code>0:0.1:1</code> určuje <b>krok</b>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A4</span><div>
+<p>Vytvor stĺpcový vektor s hodnotami 1, 2, 3 dvoma spôsobmi — priamo bodkočiarkami a transpozíciou riadkového vektora.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">s1 = [1; 2; 3]
+s2 = (1:3)'        % apostrof = transpozícia</pre>
+<pre class="out">s1 =
+     1
+     2
+     3
+s2 =
+     1
+     2
+     3</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A5</span><div>
+<p>Vytvor maticu 3×3 s číslami 1 až 9 (po riadkoch). Potom vytvor maticu núl 3×2, maticu samých sedmičiek 2×4 a jednotkovú maticu 4×4.<span class="hint">Pomoc: <code>zeros</code>, <code>ones</code>, <code>eye</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 3; 4 5 6; 7 8 9]
+zeros(3,2)
+ones(2,4) * 7      % neexistuje funkcia "sevens"
+eye(4)</pre>
+<pre class="out">A =
+     1     2     3
+     4     5     6
+     7     8     9
+ans =
+     0     0
+     0     0
+     0     0
+ans =
+     7     7     7     7
+     7     7     7     7</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A6</span><div>
+<p>Vytvor maticu 3×4 náhodných celých čísel od 1 do 10.<span class="hint">Pomoc: <code>randi</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">R = randi(10, 3, 4)</pre>
+<div class="note">Výsledok bude zakaždým iný — to je v poriadku. Ak chceš rovnaké „náhodné“ čísla opakovane, nastav semienko: <code>rng(0)</code>.</div>
+</details></div>
+
+<h3>B · Rozmery a indexovanie</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Pre maticu <code>M = [1 2 3 4; 5 6 7 8; 9 10 11 12]</code> zisti rozmery (aj do dvoch premenných), <code>length</code> a <code>numel</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = [1 2 3 4; 5 6 7 8; 9 10 11 12];
+size(M)
+[riadky, stlpce] = size(M)
+length(M)          % najväčší rozmer
+numel(M)           % počet prvkov</pre>
+<pre class="out">ans =
+     3     4
+riadky =
+     3
+stlpce =
+     4
+ans =
+     4
+ans =
+    12</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Z matice <code>M</code> vyber: prvok v 2. riadku a 3. stĺpci, celý 3. stĺpec, posledný riadok a posledný prvok prvého riadku (použi <code>end</code>).</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M(2,3)
+M(:,3)
+M(end,:)
+M(1,end)</pre>
+<pre class="out">ans =
+     7
+ans =
+     3
+     7
+    11
+ans =
+     9    10    11    12
+ans =
+     4</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B3</span><div>
+<p>Pre vektor <code>v = [10 20 30 40 50 60]</code> vyber prvky 2 až 4, prvý a posledný prvok naraz, a posledné dva prvky.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">v = [10 20 30 40 50 60];
+v(2:4)
+v([1 6])        % vektor indexov
+v(end-1:end)</pre>
+<pre class="out">ans =
+    20    30    40
+ans =
+    10    60
+ans =
+    50    60</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B4</span><div>
+<p>V matici <code>A = [1 2 3; 4 5 6; 7 8 9]</code> vymeň prvý a tretí <b>riadok</b>. Potom (z pôvodnej matice) vymeň prvý a druhý <b>stĺpec</b>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 3; 4 5 6; 7 8 9];
+A([1 3],:) = A([3 1],:)
+
+A = [1 2 3; 4 5 6; 7 8 9];
+A(:,[1 2]) = A(:,[2 1])</pre>
+<pre class="out">A =
+     7     8     9
+     4     5     6
+     1     2     3
+A =
+     2     1     3
+     5     4     6
+     8     7     9</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B5</span><div>
+<p>Z matice <code>A</code> zmaž druhý riadok. Potom (z pôvodnej) zmaž prvý a tretí stĺpec.<span class="hint">Pomoc: priradenie prázdnej matice <code>[]</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 3; 4 5 6; 7 8 9];
+A(2,:) = []
+
+A = [1 2 3; 4 5 6; 7 8 9];
+A(:,[1 3]) = []</pre>
+<pre class="out">A =
+     1     2     3
+     7     8     9
+A =
+     2
+     5
+     8</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B6</span><div>
+<p>Nahraď druhý riadok matice <code>A = [1 2 3; 4 5 6; 7 8 9]</code> tretím stĺpcom matice <code>B = [1 2 3; 7 8 9; 4 5 6]</code>.<span class="hint">Pomoc: stĺpec treba transponovať na riadok</span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 3; 4 5 6; 7 8 9];
+B = [1 2 3; 7 8 9; 4 5 6];
+A(2,:) = B(:,3)'</pre>
+<pre class="out">A =
+     1     2     3
+     3     9     6
+     7     8     9</pre>
+</details></div>
+
+<h3>C · Operácie s poľami</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Pre vektor <code>w = [3 7 2 1]</code> vypočítaj <code>w * 3</code>, <code>w / 2</code> a <code>w + 10</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">w = [3 7 2 1];
+w * 3
+w / 2
+w + 10</pre>
+<pre class="out">ans =
+     9    21     6     3
+ans =
+    1.5000    3.5000    1.0000    0.5000
+ans =
+    13    17    12    11</pre>
+<div class="note">Operácia s jedným číslom (skalárom) sa vykoná na <b>každom</b> prvku poľa.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Pre matice <code>X = [1 2; 3 4]</code> a <code>Y = [5 6; 7 8]</code> vypočítaj <code>X .* Y</code> aj <code>X * Y</code>. Porovnaj výsledky a vysvetli rozdiel.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">X = [1 2; 3 4];
+Y = [5 6; 7 8];
+X .* Y      % prvok po prvku
+X * Y       % maticové násobenie</pre>
+<pre class="out">ans =
+     5    12
+    21    32
+ans =
+    19    22
+    43    50</pre>
+<div class="note"><code>X .* Y</code> násobí zodpovedajúce prvky: 1·5, 2·6, … Pri <code>X * Y</code> je prvok (1,1) súčet súčinov prvého riadku a prvého stĺpca: 1·5 + 2·7 = 19.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C3</span><div>
+<p>Pre maticu <code>X</code> vypočítaj <code>X .^ 2</code> aj <code>X ^ 2</code>. V čom je rozdiel? Skús aj <code>w ^ 2</code> pre riadkový vektor — čo sa stane?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">X .^ 2      % každý prvok na druhú
+X ^ 2       % X * X
+w ^ 2       % chyba!</pre>
+<pre class="out">ans =
+     1     4
+     9    16
+ans =
+     7    10
+    15    22
+Error using  ^
+Incorrect dimensions for raising a matrix
+to a power. ... use POWER (.^) for
+elementwise power.</pre>
+<div class="note"><code>w ^ 2</code> by znamenalo <code>w * w</code> ako matice — pre riadkový vektor (1×4) to nedáva zmysel, preto chyba. <b>Zabudnutá bodka je najčastejšia chyba začiatočníkov.</b></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C4</span><div>
+<p>Transponuj maticu <code>X</code>. Potom pre <code>S = [1 2 3; 4 5 6]</code> vypočítaj súčty po stĺpcoch, po riadkoch a súčet všetkých prvkov.<span class="hint">Pomoc: <code>sum(S)</code>, <code>sum(S,2)</code>, <code>sum(S(:))</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">X'
+S = [1 2 3; 4 5 6];
+sum(S)        % po stĺpcoch
+sum(S,2)      % po riadkoch
+sum(S(:))     % všetko spolu</pre>
+<pre class="out">ans =
+     1     3
+     2     4
+ans =
+     5     7     9
+ans =
+     6
+    15
+ans =
+    21</pre>
+<div class="note">Zápis <code>S(:)</code> „rozvinie“ maticu na jeden dlhý stĺpcový vektor.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C5</span><div>
+<p>Pre vektor <code>t = [4 8 15 16 23 42]</code> zisti minimum, maximum, priemer a zoraď ho zostupne.<span class="hint">Pomoc: <code>min</code>, <code>max</code>, <code>mean</code>, <code>sort(...,'descend')</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">t = [4 8 15 16 23 42];
+min(t)
+max(t)
+mean(t)
+sort(t,'descend')</pre>
+<pre class="out">ans =
+     4
+ans =
+    42
+ans =
+   18
+ans =
+    42    23    16    15     8     4</pre>
+</details></div>
+
+<h3>D · Logické indexovanie</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Z vektora <code>c = [5 12 3 18 7 25]</code> vyber len prvky väčšie ako 10.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">c = [5 12 3 18 7 25];
+c &gt; 10        % logické pole
+c(c &gt; 10)     % logické indexovanie</pre>
+<pre class="out">ans =
+  1x6 logical array
+   0   1   0   1   0   1
+ans =
+    12    18    25</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Zisti, koľko prvkov vektora <code>z = [-3 5 -8 2 0 -1]</code> je záporných a na ktorých pozíciách sa nachádzajú.<span class="hint">Pomoc: <code>sum</code>, <code>find</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">z = [-3 5 -8 2 0 -1];
+sum(z &lt; 0)      % koľko ich je
+find(z &lt; 0)     % kde sú
+find(z == 0)</pre>
+<pre class="out">ans =
+     3
+ans =
+     1     3     6
+ans =
+     5</pre>
+<div class="note">Rozdiel: <code>z(z&lt;0)</code> vráti <b>hodnoty</b>, <code>find(z&lt;0)</code> vráti <b>indexy</b>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Vo vektore <code>h = [50 120 90 300 75]</code> nahraď všetky hodnoty väčšie ako 100 hodnotou 100.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">h = [50 120 90 300 75];
+h(h &gt; 100) = 100</pre>
+<pre class="out">h =
+    50   100    90   100    75</pre>
+<div class="note">Logické indexovanie sa dá použiť aj na ľavej strane priradenia — to je veľmi mocný nástroj.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D4</span><div>
+<p>Pre vektor <code>q = [2 4 6 8]</code> zisti, či sú všetky prvky kladné a či je aspoň jeden nepárny.<span class="hint">Pomoc: <code>all</code>, <code>any</code>, <code>mod</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">q = [2 4 6 8];
+all(q &gt; 0)
+any(mod(q,2) == 1)</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+  logical
+   0</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D5</span><div>
+<p>Vo vektore <code>n = [1 NaN 3 NaN 5]</code> zisti, kde sú <code>NaN</code> hodnoty, koľko ich je, a nahraď ich nulou.<span class="hint">Pomoc: <code>isnan</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">n = [1 NaN 3 NaN 5];
+isnan(n)
+sum(isnan(n))
+n(isnan(n)) = 0</pre>
+<pre class="out">ans =
+  1x5 logical array
+   0   1   0   1   0
+ans =
+     2
+n =
+     1     0     3     0     5</pre>
+<div class="note"><code>NaN</code> (not a number) sa nedá porovnať cez <code>==</code> — <code>NaN == NaN</code> je <b>nepravda</b>. Preto existuje funkcia <code>isnan</code>.</div>
+</details></div>
+
+<h3>E · Sústavy lineárnych rovníc</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Vyrieš sústavu rovníc:</p>
+<pre class="code">2*x1 + 5*x2 + 3*x3 = 1
+4*x1 + 6*x2 + 2*x3 = 5
+1*x1 - 5*x2 + 3*x3 = 3</pre>
+<span class="hint">Pomoc: zapíš maticu <code>A</code> a vektor <code>b</code>, potom použi <code>A \ b</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [2 5 3; 4 6 2; 1 -5 3];
+b = [1; 5; 3];
+x = A \ b</pre>
+<pre class="out">x =
+    2.0278
+   -0.4028
+   -0.3472</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E2</span><div>
+<p>Over správnosť riešenia — vynásob <code>A</code> krát <code>x</code>, má vyjsť pôvodné <code>b</code>. Potom vyrieš tú istú sústavu aj cez <code>inv(A)*b</code> a porovnaj.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A * x            % kontrola
+x2 = inv(A) * b
+max(abs(x - x2))  % rozdiel oboch postupov</pre>
+<pre class="out">ans =
+    1.0000
+    5.0000
+    3.0000
+x2 =
+    2.0278
+   -0.4028
+   -0.3472</pre>
+<div class="note">Oba postupy dajú prakticky rovnaký výsledok, ale <code>A\b</code> je <b>rýchlejšie a presnejšie</b> — počítať inverznú maticu je zbytočný medzikrok.</div>
+</details></div>
+
+<h3>F · Bonusové úlohy</h3>
+
+<div class="task"><div class="q"><span class="num">F1</span><div>
+<p>Vytvor maticu 4×4 s číslami 1 až 16 (po riadkoch). Vyber jej hlavnú diagonálu a spočítaj jej súčet.<span class="hint">Pomoc: <code>reshape</code>, <code>diag</code>, <code>trace</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">D = reshape(1:16, 4, 4)'   % transpozícia, lebo reshape plní po stĺpcoch
+diag(D)
+trace(D)</pre>
+<pre class="out">D =
+     1     2     3     4
+     5     6     7     8
+     9    10    11    12
+    13    14    15    16
+ans =
+     1
+     6
+    11
+    16
+ans =
+    34</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F2</span><div>
+<p>Vytvor maticu 4×4, ktorá vyzerá ako šachovnica z núl a jednotiek.<span class="hint">Pomoc: indexovanie s krokom, napr. <code>1:2:end</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sachovnica = zeros(4);
+sachovnica(1:2:end, 1:2:end) = 1;
+sachovnica(2:2:end, 2:2:end) = 1;
+sachovnica</pre>
+<pre class="out">sachovnica =
+     1     0     1     0
+     0     1     0     1
+     1     0     1     0
+     0     1     0     1</pre>
+</details></div>
+
+<footer>
+  MATLAB — cvičenia k prednáškam 1 a 2 · SPŠE Karola Adlera 5
+</footer>
+
+</main>
+</body>
+</html>
