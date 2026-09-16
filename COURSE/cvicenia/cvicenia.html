@@ -950,6 +950,360 @@ sachovnica</pre>
      0     1     0     1</pre>
 </details></div>
 
+<!-- ============ MATICE ============ -->
+<h2>Matice v MATLABe
+  <span class="sub">Nadväzuje na teoretickú prednášku — čo sme počítali ručne, teraz overíme v MATLABe</span>
+</h2>
+
+<h3>A · Násobenie a transpozícia</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Vytvor matice <code>A = [1 2 3; 4 5 6]</code> a <code>B = [7 8; 9 10; 11 12]</code>. Zisti ich rozmery, over, či sa dajú vynásobiť, a vynásob ich. Sedí výsledok s tým, čo sme počítali ručne?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 3; 4 5 6];
+B = [7 8; 9 10; 11 12];
+size(A)
+size(B)
+C = A*B</pre>
+<pre class="out">ans =
+     2     3
+ans =
+     3     2
+C =
+    58    64
+   139   154</pre>
+<div class="note">Vnútorné rozmery sú 3 a 3 — sedia, takže násobenie je možné a výsledok je 2×2.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Skús násobiť v opačnom poradí: <code>B*A</code>. Ide to? Aký rozmer má výsledok? Je rovnaký ako <code>A*B</code>?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">D = B*A
+size(D)</pre>
+<pre class="out">D =
+    39    54    69
+    49    68    87
+    59    82   105
+ans =
+     3     3</pre>
+<div class="note">Násobenie je možné (vnútorné rozmery 2 a 2), ale výsledok je <b>3×3</b> a úplne iné čísla — pekný dôkaz, že násobenie matíc nie je komutatívne.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Skús vynásobiť <code>A*A</code>. Čo sa stane a prečo? Prečítaj si chybovú hlášku.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A*A</pre>
+<pre class="out">Incorrect dimensions for matrix
+multiplication. Check that the number
+of columns in the first matrix matches
+the number of rows in the second matrix.
+To operate on each element of the matrix
+individually, use TIMES (.*) for
+elementwise multiplication.</pre>
+<div class="note">A je 2×3, takže vnútorné rozmery by boli 3 a 2 — nesedia. Hláška rovno ponúka <code>.*</code>, ale to je iná operácia (prvok po prvku), nie to, čo sme chceli.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A4</span><div>
+<p>Transponuj maticu <code>A</code>. Over, že dvojitá transpozícia vráti pôvodnú maticu, a že platí <code>(A*B)' = B'*A'</code>.<span class="hint">Pomoc: <code>isequal</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A'
+isequal((A')', A)
+isequal((A*B)', B'*A')</pre>
+<pre class="out">ans =
+     1     4
+     2     5
+     3     6
+ans =
+  logical
+   1
+ans =
+  logical
+   1</pre>
+<div class="note">Pozor na poradie: pri transpozícii súčinu sa matice <b>vymenia</b>. Zápis <code>A'*B'</code> by nefungoval — rozmery by nesedeli.</div>
+</details></div>
+
+<h3>B · Diagonála a špeciálne matice</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Pre maticu <code>D = [2 7 1; 0 5 3; 4 6 9]</code> vypíš hlavnú diagonálu a stopu. Over, že stopa je naozaj súčet prvkov diagonály.<span class="hint">Pomoc: <code>diag</code>, <code>trace</code>, <code>sum</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">D = [2 7 1; 0 5 3; 4 6 9];
+diag(D)'
+trace(D)
+sum(diag(D))</pre>
+<pre class="out">ans =
+     2     5     9
+ans =
+    16
+ans =
+    16</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Vytvor diagonálnu maticu s hodnotami 3, 5, 7 na diagonále. Potom z matice <code>M</code> vyber hornú a dolnú trojuholníkovú časť.<span class="hint">Pomoc: <code>diag</code> s vektorom, <code>triu</code>, <code>tril</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">diag([3 5 7])
+M = [1 2 3 4; 5 6 7 8; 9 10 11 12; 13 14 15 16];
+triu(M)
+tril(M)</pre>
+<pre class="out">ans =
+     3     0     0
+     0     5     0
+     0     0     7</pre>
+<div class="note">Tá istá funkcia <code>diag</code> robí dve veci: z <b>matice</b> vyberie diagonálu, z <b>vektora</b> vyrobí diagonálnu maticu.</div>
+</details></div>
+
+<h3>C · Determinant</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Vypočítaj determinant matice <code>P = [3 1; 2 4]</code> funkciou <code>det</code>. Potom to isté spočítaj ručne podľa vzorca <code>a*d - b*c</code> a porovnaj.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">P = [3 1; 2 4];
+det(P)
+P(1,1)*P(2,2) - P(1,2)*P(2,1)</pre>
+<pre class="out">ans =
+    10
+ans =
+    10</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Vypočítaj determinant matice <code>A4</code> z prednášky (4×4). Má vyjsť <code>-22</code>.</p>
+<pre class="code">A4 = [1 2 0 1;
+      3 0 2 1;
+      2 1 3 0;
+      0 1 0 2];</pre>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">det(A4)</pre>
+<pre class="out">ans =
+   -22</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C3</span><div>
+<p>Over Laplaceov rozvoj podľa 4. riadku. Minor <code>M42</code> získaš výberom riadkov 1,2,3 a stĺpcov 1,3,4; minor <code>M44</code> výberom riadkov 1,2,3 a stĺpcov 1,2,3. Potom zlož <code>det = 1*M42 + 2*M44</code>.</p>
+<span class="hint">Pozor: desatinné čísla neporovnávaj cez <code>==</code>, ale cez toleranciu.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M42 = det(A4([1 2 3],[1 3 4]))
+M44 = det(A4([1 2 3],[1 2 3]))
+rozvoj = 1*M42 + 2*M44
+abs(rozvoj - det(A4)) &lt; 1e-10</pre>
+<pre class="out">M42 =
+     2
+M44 =
+   -12
+rozvoj =
+   -22
+ans =
+  logical
+   1</pre>
+<div class="note">Indexovanie <code>A4([1 2 3],[1 3 4])</code> robí presne to, čo sme na tabuli robili škrtaním riadku a stĺpca.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C4</span><div>
+<p>Vytvor singulárnu maticu (napr. takú, kde je jeden riadok násobkom iného) a over, že jej determinant je nulový. Zisti aj jej hodnosť.<span class="hint">Pomoc: <code>rank</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">S = [1 2 3; 2 4 6; 7 8 9];   % 2. riadok = 2× prvý
+det(S)
+rank(S)</pre>
+<pre class="out">ans =
+     0
+ans =
+     2</pre>
+<div class="note">Hodnosť 2 pri matici 3×3 znamená, že riadky nie sú nezávislé — a to je presne dôvod, prečo je determinant nulový.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C5</span><div>
+<p>Over vlastnosti determinantu: <code>det(A') = det(A)</code> a <code>det(A*B) = det(A)*det(B)</code>. Potom over, že determinant trojuholníkovej matice je súčin prvkov na diagonále.<span class="hint">Pomoc: <code>prod(diag(...))</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">X = [2 1; 5 3];
+Y = [1 4; 2 7];
+det(X') - det(X)
+det(X*Y) - det(X)*det(Y)
+
+U = [2 9 4; 0 3 7; 0 0 5];
+det(U)
+prod(diag(U))</pre>
+<pre class="out">ans =
+     0
+ans =
+     0
+ans =
+    30
+ans =
+    30</pre>
+<div class="note">Rozdiely vyšli nulové, takže obe vlastnosti platia. Posledná vlastnosť je dôvod, prečo počítače počítajú determinant Gaussovou elimináciou — maticu upravia na trojuholníkovú a potom stačí súčin diagonály.</div>
+</details></div>
+
+<h3>D · Inverzná matica</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Pre maticu <code>G = [4 7; 2 6]</code> vypočítaj inverznú maticu a urob skúšku <code>G*inv(G)</code>. Porovnaj výsledok aj s ručným vzorcom <code>1/det(G) * [d -b; -c a]</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">G = [4 7; 2 6];
+det(G)
+Ginv = inv(G)
+G*Ginv
+
+a = G(1,1); b = G(1,2); c = G(2,1); d = G(2,2);
+rucne = (1/det(G)) * [d -b; -c a]</pre>
+<pre class="out">ans =
+    10
+Ginv =
+    0.6000   -0.7000
+   -0.2000    0.4000
+ans =
+    1.0000         0
+         0    1.0000
+rucne =
+    0.6000   -0.7000
+   -0.2000    0.4000</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Skús zavolať <code>inv</code> na singulárnej matici <code>S</code> z úlohy C4. Čo MATLAB vypíše a čo vráti?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">inv(S)</pre>
+<pre class="out">Warning: Matrix is singular to working
+precision.
+ans =
+   Inf   Inf   Inf
+   Inf   Inf   Inf
+   Inf   Inf   Inf</pre>
+<div class="note">MATLAB nespadne — len varuje a vráti nekonečná. Preto sa oplatí <b>najprv</b> skontrolovať determinant a až potom počítať inverznú maticu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Vypočítaj <code>E = G*inv(G)</code> a otestuj <code>E == eye(2)</code>. Vyšli všetky prvky ako <code>true</code>? Prečo nie? Ako sa to má testovať správne?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">E = G*inv(G);
+E == eye(2)
+abs(E - eye(2)) &lt; 1e-10</pre>
+<div class="note">Pri výpočte s desatinnými číslami vznikajú drobné zaokrúhľovacie chyby, takže výsledok nemusí byť <b>presne</b> jednotková matica. Preto sa výsledky maticových výpočtov nikdy neporovnávajú cez <code>==</code>, ale s toleranciou.</div>
+</details></div>
+
+<h3>E · Sústavy rovníc</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Vyrieš sústavu z prednášky pomocou ľavého delenia, potom aj cez <code>inv(A)*b</code>, a nakoniec over riešenie dosadením.</p>
+<pre class="code"> x + 2y +  z = 8
+2x +  y -  z = 1
+3x -  y + 2z = 7</pre>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">A = [1 2 1; 2 1 -1; 3 -1 2];
+b = [8; 1; 7];
+x = A \ b
+x2 = inv(A) * b;
+max(abs(x - x2))
+A*x</pre>
+<pre class="out">x =
+     1
+     2
+     3
+ans =
+   4.4409e-16
+ans =
+     8
+     1
+     7</pre>
+<div class="note">Oba postupy dajú to isté riešenie (rozdiel rádovo 10⁻¹⁶ je len zaokrúhľovacia chyba) a dosadenie vráti pôvodné <code>b</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E2</span><div>
+<p>Použi funkciu <code>rref</code> na rozšírenú maticu <code>[A b]</code>. Porovnaj výsledok s tým, čo nám vyšlo ručnou Gaussovou elimináciou.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rref([A b])</pre>
+<pre class="out">ans =
+     1     0     0     1
+     0     1     0     2
+     0     0     1     3</pre>
+<div class="note">Vľavo je jednotková matica, vpravo riešenie 1, 2, 3 — presne to, k čomu sme sa dopracovali ručne cez spätnú substitúciu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E3</span><div>
+<p>Vytvor sústavu, ktorá nemá riešenie, zisti determinant jej matice a pozri sa na výsledok <code>rref</code>.</p>
+<pre class="code"> x + 2y = 3
+2x + 4y = 7</pre>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">As = [1 2; 2 4];
+bs = [3; 7];
+det(As)
+rref([As bs])</pre>
+<pre class="out">ans =
+     0
+ans =
+     1     2     0
+     0     0     1</pre>
+<div class="note">Determinant je nulový a posledný riadok hovorí <code>0 = 1</code> — to neplatí nikdy, takže sústava nemá riešenie.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E4</span><div>
+<p>Porovnaj rýchlosť <code>A\b</code> a <code>inv(A)*b</code> na matici 500×500.</p>
+<span class="hint">Pozor: prvé volanie každej operácie je vždy pomalšie (réžia na pozadí). Oba postupy najprv raz spusti naprázdno a až potom meraj — meranie zopakuj 3× a spočítaj priemer.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">n = 500;
+R = rand(n) + n*eye(n);
+v = rand(n,1);
+
+x1 = R\v;  x2 = inv(R)*v;      % zahriatie
+
+t1 = 0; t2 = 0;
+for k = 1:3
+    tic; x1 = R\v;       t1 = t1 + toc;
+    tic; x2 = inv(R)*v;  t2 = t2 + toc;
+end
+fprintf('A\\b       priemerne %.4f s\n', t1/3);
+fprintf('inv(A)*b  priemerne %.4f s\n', t2/3);</pre>
+<pre class="out">A\b       priemerne 0.0030 s
+inv(A)*b  priemerne 0.0047 s</pre>
+<div class="note">Ľavé delenie je rýchlejšie — nepočíta celú inverznú maticu, čo je zbytočný medzikrok. <b>Bez zahriatia</b> by ti prvé meranie vyšlo opačne, lebo prvé volanie zahŕňa réžiu navyše.</div>
+</details></div>
+
+<h3>F · Bonusové úlohy</h3>
+
+<div class="task"><div class="q"><span class="num">F1</span><div>
+<p>Vytvor anonymnú funkciu, ktorá spočíta determinant matice 2×2 bez použitia <code>det()</code>, a over ju na matici <code>P</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">mojDet2 = @(Z) Z(1,1)*Z(2,2) - Z(1,2)*Z(2,1);
+mojDet2(P)
+det(P)</pre>
+<pre class="out">ans =
+    10
+ans =
+    10</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F2</span><div>
+<p>Zisti hodnosť regulárnej a singulárnej matice. Ako súvisí hodnosť s determinantom?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rank(A)    % regulárna 3x3
+rank(S)    % singulárna 3x3</pre>
+<pre class="out">ans =
+     3
+ans =
+     2</pre>
+<div class="note">Štvorcová matica <code>n×n</code> je regulárna práve vtedy, keď má <b>plnú hodnosť</b> <code>n</code> — a to je presne vtedy, keď je jej determinant nenulový.</div>
+</details></div>
+
 <footer>
   MATLAB — cvičenia k prednáškam 1 a 2 · SPŠE Karola Adlera 5
 </footer>
