@@ -13,10 +13,8 @@ clc; clear;
 % Vypocitaj a vypis ich sucet, rozdiel, sucin a podiel.
 
 
-
 %% A2) Vytvor premennu c s hodnotou 100 tak, aby sa jej hodnota NEVYPISALA.
 % Potom ju vypis tak, ze napises len jej meno.
-
 
 
 %% A3) Napis vyraz 7 * 6 bez priradenia do premennej.
@@ -45,8 +43,8 @@ clc; clear;
 
 
 %% B3) Co vrati int8(150)? A co uint8(-3)? Vysvetli preco.
-
-
+int8(150)
+uint8(-3)
 
 %% B4) Vytvor tri premenne typu double, int8 a logical.
 % Zisti, kolko bajtov kazda zabera. Pomoc: whos
