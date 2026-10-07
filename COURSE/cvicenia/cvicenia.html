@@ -124,8 +124,8 @@
 <div class="howto">
   <b>Ako pracovať s cvičeniami:</b> Najprv skús úlohu vyriešiť sám priamo v MATLABe.
   Riešenie si zobrazíš kliknutím na <b>Ukázať riešenie</b> — ale až potom, čo si to naozaj skúsil.
-  Rovnaké úlohy nájdeš aj v súboroch <code>cvicenie_01.m</code>, <code>cvicenie_02.m</code>
-  a <code>cvicenie_matice.m</code>, kam môžeš písať priamo v MATLABe.
+  Rovnaké úlohy nájdeš aj v súboroch <code>cvicenie_01.m</code>, <code>cvicenie_02.m</code>,
+  <code>cvicenie_matice.m</code> a <code>cvicenie_03.m</code>, kam môžeš písať priamo v MATLABe.
 </div>
 
 <div class="controls">
@@ -1302,6 +1302,452 @@ rank(S)    % singulárna 3x3</pre>
 ans =
      2</pre>
 <div class="note">Štvorcová matica <code>n×n</code> je regulárna práve vtedy, keď má <b>plnú hodnosť</b> <code>n</code> — a to je presne vtedy, keď je jej determinant nenulový.</div>
+</details></div>
+
+<!-- ============ LEKCIA 3 ============ -->
+<h2>Lekcia 3 — Riadiace štruktúry, funkcie a reťazce
+  <span class="sub">Vetvenie a cykly, vlastné funkcie, podrobná práca s textom</span>
+</h2>
+
+<h3>A · Vetvenie</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Pre <code>teplota = 18</code> vypíš odkaz, ak je teplota menšia ako 20. Potom pre číslo <code>-7</code> vypíš pomocou <code>if</code>–<code>else</code>, či je kladné (alebo nula), alebo záporné.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">teplota = 18;
+if teplota &lt; 20
+    disp('Je zima, zober si bundu')
+end
+
+cislo = -7;
+if cislo &gt;= 0
+    disp('Cislo je kladne alebo nula')
+else
+    disp('Cislo je zaporne')
+end</pre>
+<pre class="out">Je zima, zober si bundu
+Cislo je zaporne</pre>
+<div class="note">Každý <code>if</code> sa musí ukončiť slovom <code>end</code> — MATLAB na rozdiel od Pythonu nepozná odsadenie ako súčasť syntaxe.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Pre 83 bodov urči známku podľa stupnice: 90 a viac → 1, 75–89 → 2, 60–74 → 3, 45–59 → 4, menej → 5. Výsledok vypíš vetou pomocou <code>fprintf</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">body = 83;
+if body &gt;= 90
+    znamka = 1;
+elseif body &gt;= 75
+    znamka = 2;
+elseif body &gt;= 60
+    znamka = 3;
+elseif body &gt;= 45
+    znamka = 4;
+else
+    znamka = 5;
+end
+fprintf('Za %d bodov je znamka %d\n', body, znamka);</pre>
+<pre class="out">Za 83 bodov je znamka 2</pre>
+<div class="note">Podmienky sa testujú zhora nadol a vykoná sa <b>len prvá</b> splnená. Preto stačí písať <code>body &gt;= 75</code> a netreba pridávať <code>&amp;&amp; body &lt; 90</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Zisti, či je číslo 17 párne alebo nepárne.<span class="hint">Pomoc: <code>mod(n,2)</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">n = 17;
+if mod(n,2) == 0
+    fprintf('%d je parne\n', n);
+else
+    fprintf('%d je neparne\n', n);
+end</pre>
+<pre class="out">17 je neparne</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A4</span><div>
+<p>Pomocou <code>switch</code> urči ročné obdobie pre mesiac 7 (zima = 12,1,2; jar = 3,4,5; leto = 6,7,8; inak jeseň).<span class="hint">Pomoc: viac hodnôt naraz zapíšeš ako <code>case {12, 1, 2}</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">mesiac = 7;
+switch mesiac
+    case {12, 1, 2}
+        disp('Zima')
+    case {3, 4, 5}
+        disp('Jar')
+    case {6, 7, 8}
+        disp('Leto')
+    otherwise
+        disp('Jesen')
+end</pre>
+<pre class="out">Leto</pre>
+<div class="note">Na rozdiel od jazyka C tu <b>netreba</b> <code>break</code> — vykoná sa vždy len jedna vetva.</div>
+</details></div>
+
+<h3>B · Cykly</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Pomocou cyklu <code>for</code> spočítaj súčet a súčin čísel od 1 do 10.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sucet = 0;
+sucin = 1;
+for i = 1:10
+    sucet = sucet + i;
+    sucin = sucin * i;
+end
+sucet
+sucin</pre>
+<pre class="out">sucet =
+    55
+sucin =
+     3628800</pre>
+<div class="note">Všimni si štartovacie hodnoty: pri súčte začíname na <b>0</b>, pri súčine na <b>1</b>. Keby sme súčin začali nulou, vyšla by nula.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Prejdi cyklom vektor teplôt <code>[12 18 25 9 31]</code> a pre každú hodnotu vypíš, či je nad 20 (teplo), alebo nie (chladno).<span class="hint">Pomoc: cyklus môže ísť priamo cez hodnoty: <code>for t = teploty</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">teploty = [12 18 25 9 31];
+for t = teploty
+    if t &gt; 20
+        fprintf('%d stupnov - teplo\n', t);
+    else
+        fprintf('%d stupnov - chladno\n', t);
+    end
+end</pre>
+<pre class="out">12 stupnov - chladno
+18 stupnov - chladno
+25 stupnov - teplo
+9 stupnov - chladno
+31 stupnov - teplo</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B3</span><div>
+<p>Pomocou vnoreného cyklu vypíš malú násobilku 3×4 (tri riadky, štyri stĺpce).<span class="hint">Pomoc: <code>fprintf('%4d', ...)</code> a na konci riadku <code>fprintf('\n')</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">for i = 1:3
+    for j = 1:4
+        fprintf('%4d', i*j);
+    end
+    fprintf('\n');
+end</pre>
+<pre class="out">   1   2   3   4
+   2   4   6   8
+   3   6   9  12</pre>
+<div class="note">Vnútorný cyklus vypíše celý riadok, vonkajší sa postará o prechod na ďalší. Zápis <code>%4d</code> zarovná čísla na šírku 4 znakov, takže stĺpce pekne sedia pod sebou.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B4</span><div>
+<p>Pomocou <code>while</code> zisti, koľkokrát treba zdvojnásobiť číslo 1, aby presiahlo 500.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">x = 1;
+krokov = 0;
+while x &lt; 500
+    x = x * 2;
+    krokov = krokov + 1;
+end
+fprintf('Po %d krokoch je x = %d\n', krokov, x);</pre>
+<pre class="out">Po 9 krokoch je x = 512</pre>
+<div class="note">V tele cyklu sa <b>musí</b> meniť premenná z podmienky (tu <code>x</code>), inak by cyklus bežal donekonečna. Zaseknutý program zastavíš cez <code>Ctrl+C</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B5</span><div>
+<p>Pomocou <code>while</code> spočítaj ciferný súčet čísla 4728.<span class="hint">Pomoc: posledná cifra je <code>mod(x,10)</code>, číslo bez poslednej cifry je <code>floor(x/10)</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">cislo = 4728;
+sucetCifier = 0;
+zvysok = cislo;
+while zvysok &gt; 0
+    sucetCifier = sucetCifier + mod(zvysok, 10);
+    zvysok = floor(zvysok / 10);
+end
+fprintf('Ciferny sucet cisla %d je %d\n', cislo, sucetCifier);</pre>
+<pre class="out">Ciferny sucet cisla 4728 je 21</pre>
+<div class="note">Toto je typická úloha pre <code>while</code> — vopred nevieme, koľko cifier číslo má, len vieme, kedy skončiť (keď z čísla nič nezostane).</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B6</span><div>
+<p>Nájdi prvé prvočíslo väčšie ako 100 a hneď potom cyklus ukonči. Potom z vektora <code>[5 -3 8 -1 12 -7]</code> spočítaj súčet len kladných čísel — záporné preskoč.<span class="hint">Pomoc: <code>isprime</code>, <code>break</code>, <code>continue</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">n = 101;
+while true
+    if isprime(n)
+        fprintf('Prve prvocislo nad 100: %d\n', n);
+        break
+    end
+    n = n + 1;
+end
+
+data = [5 -3 8 -1 12 -7];
+sucetKladnych = 0;
+for k = data
+    if k &lt; 0
+        continue
+    end
+    sucetKladnych = sucetKladnych + k;
+end
+sucetKladnych</pre>
+<pre class="out">Prve prvocislo nad 100: 101
+sucetKladnych =
+    25</pre>
+<div class="note"><code>break</code> ukončí celý cyklus, <code>continue</code> preskočí len zvyšok aktuálnej iterácie a pokračuje ďalšou.</div>
+</details></div>
+
+<h3>C · Vektorizácia</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Porovnaj rýchlosť cyklu a funkcie <code>sum</code> na vektore s miliónom prvkov.</p>
+<span class="hint">Pozor: prvé volanie je vždy pomalšie. Oba postupy najprv spusti naprázdno a až potom meraj; meranie zopakuj 3× a sprav priemer.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">n = 1e6;
+v = rand(1,n);
+
+s1 = 0; for i = 1:n, s1 = s1 + v(i); end   % zahriatie
+s2 = sum(v);
+
+t1 = 0; t2 = 0;
+for r = 1:3
+    tic; s1 = 0; for i = 1:n, s1 = s1 + v(i); end; t1 = t1 + toc;
+    tic; s2 = sum(v); t2 = t2 + toc;
+end
+fprintf('cyklus: %.4f s,  sum(): %.4f s\n', t1/3, t2/3);</pre>
+<pre class="out">cyklus: 0.0027 s,  sum(): 0.0002 s</pre>
+<div class="note">Vektorový zápis je rádovo rýchlejší — a navyše kratší a čitateľnejší. <b>Pravidlo:</b> ak sa to dá napísať bez cyklu, napíš to bez cyklu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Nasledujúci cyklus spočíta, koľko je vo vektore záporných čísel. Prepíš ho do <b>jediného riadku</b> bez cyklu.</p>
+<pre class="code">v = [3 -1 4 -5 9];
+pocet = 0;
+for k = v
+    if k &lt; 0
+        pocet = pocet + 1;
+    end
+end</pre>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sum(v &lt; 0)</pre>
+<pre class="out">ans =
+     2</pre>
+<div class="note">Porovnanie <code>v &lt; 0</code> vyrobí logické pole a <code>sum</code> spočíta jednotky. Toto je presne to logické indexovanie z druhej lekcie.</div>
+</details></div>
+
+<h3>D · Funkcie</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Vytvor anonymnú funkciu <code>f(x) = 2x + 3</code> a vyskúšaj ju na čísle 5 aj na vektore <code>[1 2 3]</code>. Potom vytvor funkciu <code>g(x) = x² − 1</code> tak, aby fungovala aj na celom vektore naraz. Na čo treba dať pozor?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">f = @(x) 2*x + 3;
+f(5)
+f([1 2 3])
+
+g = @(x) x.^2 - 1;   % bodka je nutná!
+g([1 2 3 4])</pre>
+<pre class="out">ans =
+    13
+ans =
+     5     7     9
+ans =
+     0     3     8    15</pre>
+<div class="note">Pri mocnine treba <b>prvkovú</b> operáciu <code>.^</code>. Zápis <code>x^2</code> by znamenal maticové násobenie a na riadkovom vektore by skončil chybou.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Napíš funkciu <code>obsahObdlznika(a, b)</code> a funkciu <code>minMaxRozdiel(v)</code>, ktorá vráti <b>tri</b> hodnoty: minimum, maximum a ich rozdiel.</p>
+<span class="hint">Vlastné funkcie musia byť úplne na konci skriptu (alebo vo vlastnom súbore s rovnakým názvom).</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">obsahObdlznika(3, 5)
+[mn, mx, rozdiel] = minMaxRozdiel([4 9 2 15 7])
+
+% --- na konci skriptu ---
+function S = obsahObdlznika(a, b)
+    S = a * b;
+end
+
+function [minimum, maximum, rozdiel] = minMaxRozdiel(v)
+    minimum = min(v);
+    maximum = max(v);
+    rozdiel = maximum - minimum;
+end</pre>
+<pre class="out">ans =
+    15
+mn =
+     2
+mx =
+    15
+rozdiel =
+    13</pre>
+<div class="note">Viac výstupov sa pri volaní preberá do hranatých zátvoriek v rovnakom poradí, v akom sú v hlavičke funkcie.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Napíš funkciu <code>pocetSamohlasok(text)</code>, ktorá spočíta samohlásky v texte.<span class="hint">Pomoc: prejdi text cyklom a použi <code>any(znak == 'aeiouy')</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">pocetSamohlasok('programovanie')
+
+% --- na konci skriptu ---
+function pocet = pocetSamohlasok(text)
+    samohlasky = 'aeiouy';
+    pocet = 0;
+    for znak = lower(text)
+        if any(znak == samohlasky)
+            pocet = pocet + 1;
+        end
+    end
+end</pre>
+<pre class="out">ans =
+     6</pre>
+<div class="note">Cyklus <code>for znak = lower(text)</code> prechádza reťazec <b>znak po znaku</b> — reťazec typu <code>char</code> je totiž obyčajný vektor. Funkcia <code>lower</code> zabezpečí, že sa započítajú aj veľké písmená.</div>
+</details></div>
+
+<h3>E · Reťazce</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Pre reťazec <code>'Bratislava'</code> zisti dĺžku, prvý a posledný znak, prvých päť znakov a celý reťazec veľkými písmenami.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">meno = 'Bratislava';
+length(meno)
+meno(1)
+meno(end)
+meno(1:5)
+upper(meno)</pre>
+<pre class="out">ans =
+    10
+ans =
+    'B'
+ans =
+    'a'
+ans =
+    'Brati'
+ans =
+    'BRATISLAVA'</pre>
+<div class="note">Reťazec typu <code>char</code> je vektor znakov, takže platia rovnaké pravidlá indexovania ako pri číslach: od 1, dvojbodka pre rozsah, <code>end</code> pre posledný prvok.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E2</span><div>
+<p>Spoj krstné meno <code>'Jana'</code> a priezvisko <code>'Nova'</code> do jedného reťazca aj s medzerou — raz pre <code>char</code> a raz pre <code>string</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">krstne = 'Jana';
+priezvisko = 'Nova';
+cele = [krstne ' ' priezvisko]
+
+celes = "Jana" + " " + "Nova"</pre>
+<pre class="out">cele =
+    'Jana Nova'
+celes =
+    "Jana Nova"</pre>
+<div class="note">Pri <code>char</code> spájame hranatými zátvorkami ako vektory a medzeru musíme pridať ručne. Pri <code>string</code> stačí <code>+</code> — to je hlavná výhoda novšieho typu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E3</span><div>
+<p>Over, či sa zadané heslo <code>'tajne'</code> zhoduje s uloženým. <b>Prečo na to nemôžeš použiť <code>==</code>?</b> Vyskúšaj aj porovnanie <code>'ANO'</code> a <code>'ano'</code> bez ohľadu na veľkosť písmen.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">strcmp('tajne', 'tajne')
+strcmpi('ANO', 'ano')
+
+'abc' == 'abd'      % porovnáva znak po znaku
+'ano' == 'anooo'    % chyba pri rôznej dĺžke</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+  logical
+   1
+ans =
+  1x3 logical array
+   1   1   0
+Arrays have incompatible sizes
+for this operation.</pre>
+<div class="note"><b>Toto je najčastejšia chyba pri práci s textom.</b> Operátor <code>==</code> porovnáva znak po znaku a vráti <b>pole</b>, nie jednu odpoveď — a pri rôzne dlhých reťazcoch skončí chybou. Preto sa text vždy porovnáva cez <code>strcmp</code> (alebo <code>strcmpi</code>, ak nezáleží na veľkosti písmen).</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E4</span><div>
+<p>Vo vete <code>'Dnes je krasny slnecny den'</code> zisti: či obsahuje slovo <code>'slnecny'</code>, či začína na <code>'Dnes'</code>, či končí na <code>'den'</code>, a na ktorých pozíciách sa nachádza písmeno <code>'e'</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">veta = 'Dnes je krasny slnecny den';
+contains(veta, 'slnecny')
+startsWith(veta, 'Dnes')
+endsWith(veta, 'den')
+strfind(veta, 'e')</pre>
+<pre class="out">ans =
+  logical
+   1
+ans =
+  logical
+   1
+ans =
+  logical
+   1
+ans =
+     3     7    19    25</pre>
+<div class="note"><code>contains</code>, <code>startsWith</code> a <code>endsWith</code> odpovedajú áno/nie, kým <code>strfind</code> vráti <b>pozície</b> všetkých výskytov.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E5</span><div>
+<p>Rozdeľ dátum <code>'2024-09-23'</code> na tri časti a vypíš rok. Potom spoj slová <code>"MATLAB"</code>, <code>"je"</code>, <code>"super"</code> do jednej vety.<span class="hint">Pomoc: <code>strsplit</code>, <code>join</code></span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">datum = '2024-09-23';
+casti = strsplit(datum, '-')
+rok = casti{1}
+
+join(["MATLAB" "je" "super"], " ")</pre>
+<pre class="out">casti =
+  1x3 cell array
+    {'2024'}    {'09'}    {'23'}
+rok =
+    '2024'
+ans =
+    "MATLAB je super"</pre>
+<div class="note"><code>strsplit</code> vracia <b>cell array</b>, preto sa k jednotlivým častiam pristupuje zloženými zátvorkami <code>casti{1}</code>, nie okrúhlymi.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E6</span><div>
+<p>Vytvor vetu „Mam 17 rokov" tak, že číslo 17 bude uložené v premennej. Potom preveď text <code>'3.14'</code> na číslo a vyskúšaj, čo sa stane pri texte, ktorý číslo neobsahuje.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">vek = 17;
+sprava = ['Mam ' num2str(vek) ' rokov']
+str2double('3.14')
+str2double('nieje cislo')</pre>
+<pre class="out">sprava =
+    'Mam 17 rokov'
+ans =
+    3.1400
+ans =
+   NaN</pre>
+<div class="note">Ak sa prevod nepodarí, <code>str2double</code> nevyhodí chybu, ale vráti <code>NaN</code>. Preto sa oplatí výsledok skontrolovať funkciou <code>isnan</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E7</span><div>
+<p>Pomocou <code>sprintf</code> a <code>fprintf</code> vypíš počet žiakov ako celé číslo, teplotu na dve desatinné miesta, a jednoduchý cenník so zarovnanými názvami.<span class="hint">Pomoc: <code>%-10s</code> zarovná text vľavo na šírku 10 znakov</span></p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sprintf('%d ziakov', 24)
+sprintf('%.2f stupnov', 21.456)
+fprintf('%-10s %5.2f\n', 'chlieb', 2.5);
+fprintf('%-10s %5.2f\n', 'mlieko', 1.25);</pre>
+<pre class="out">ans =
+    '24 ziakov'
+ans =
+    '21.46 stupnov'
+chlieb      2.50
+mlieko      1.25</pre>
+<div class="note"><code>sprintf</code> text <b>vráti</b> (dá sa uložiť do premennej), <code>fprintf</code> ho rovno <b>vypíše</b>. Znak <code>-</code> vo formáte zarovnáva vľavo, číslo za bodkou určuje počet desatinných miest.</div>
 </details></div>
 
 <footer>
