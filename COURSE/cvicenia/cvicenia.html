@@ -103,6 +103,8 @@
     border-top:1px solid var(--border);margin-top:44px;padding-top:16px;
     color:var(--textgray);font-size:13px;text-align:center;
   }
+  .fig{margin-top:10px}
+  .fig img{display:block;max-width:100%;height:auto;border:1px solid var(--border);border-radius:6px;background:#fff}
   @media print{
     .controls{display:none}
     details{open:true}
@@ -125,7 +127,7 @@
   <b>Ako pracovať s cvičeniami:</b> Najprv skús úlohu vyriešiť sám priamo v MATLABe.
   Riešenie si zobrazíš kliknutím na <b>Ukázať riešenie</b> — ale až potom, čo si to naozaj skúsil.
   Rovnaké úlohy nájdeš aj v súboroch <code>cvicenie_01.m</code>, <code>cvicenie_02.m</code>,
-  <code>cvicenie_matice.m</code> a <code>cvicenie_03.m</code>, kam môžeš písať priamo v MATLABe.
+  <code>cvicenie_matice.m</code>, <code>cvicenie_03.m</code>, <code>cvicenie_04.m</code> a <code>cvicenie_05.m</code>, kam môžeš písať priamo v MATLABe.
 </div>
 
 <div class="controls">
@@ -1750,8 +1752,1740 @@ mlieko      1.25</pre>
 <div class="note"><code>sprintf</code> text <b>vráti</b> (dá sa uložiť do premennej), <code>fprintf</code> ho rovno <b>vypíše</b>. Znak <code>-</code> vo formáte zarovnáva vľavo, číslo za bodkou určuje počet desatinných miest.</div>
 </details></div>
 
+<!-- ============ LEKCIA 4 ============ -->
+<h2>Lekcia 4 — Grafika a vizualizácia dát
+  <span class="sub">plot a jeho parametre, popis grafu, viac kriviek a grafov, typy grafov, 3D, uloženie — pri každom riešení je skutočný výstup z MATLABu</span>
+</h2>
+
+<div class="note" style="margin:0 0 18px">Na začiatok každej úlohy napíš <code>figure</code>, aby sa graf otvoril v novom okne a predchádzajúci ti zostal na porovnanie. Keď je okien priveľa, pomôže <code>close all</code>.</div>
+
+<h3>A · Prvý graf</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Vytvor <code>x = 0:4</code> a <code>y = x.^2</code> a nakresli ich príkazom <code>plot(x, y, 'o-')</code>. Pozri sa pozorne medzi body: je to naozaj parabola?</p>
+<span class="hint">Pomôcka: MATLAB nepozná funkciu, vidí len body.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = 0:4;
+y = x.^2;
+plot(x, y, 'o-')
+title('y = x^2 z piatich bodov')
+% Medzi bodmi su rovne usecky - MATLAB o parabole nic nevie.</pre>
+<div class="fig"><img src="obrazky_cv04/A1.png" alt="Výstup úlohy A1" loading="lazy"></div>
+<div class="note">Medzi bodmi sú <b>rovné úsečky</b>. <code>plot</code> o parabole nič nevie, len spojí päť bodov. Hladkú krivku dostaneš jedine tak, že bodov bude veľa.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Do jedného grafu nakresli <code>sin(x)</code> na intervale ⟨0, 2π⟩ dvakrát: raz z <b>10 bodov</b> so značkami <code>'o-'</code> a raz z <b>200 bodov</b>. Pridaj legendu.</p>
+<span class="hint">Pomôcka: <code>linspace(0, 2*pi, 10)</code>, druhú krivku pridáš po <code>hold on</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x1 = linspace(0, 2*pi, 10);
+x2 = linspace(0, 2*pi, 200);
+plot(x1, sin(x1), 'o-')
+hold on
+plot(x2, sin(x2))
+hold off
+legend('10 bodov', '200 bodov')</pre>
+<div class="fig"><img src="obrazky_cv04/A2.png" alt="Výstup úlohy A2" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Nakresli vektor <code>y = [3 7 2 9 4]</code> príkazom <code>plot</code> len s <b>jedným</b> argumentom. Aké hodnoty sú na osi <i>x</i>?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+y = [3 7 2 9 4];
+plot(y, 'o-')
+% Na osi x je poradie prvkov: 1, 2, 3, 4, 5 - to iste ako plot(1:5, y)</pre>
+<div class="fig"><img src="obrazky_cv04/A3.png" alt="Výstup úlohy A3" loading="lazy"></div>
+<div class="note">Na osi <i>x</i> je <b>poradie prvkov</b> 1 až 5. <code>plot(y)</code> je to isté ako <code>plot(1:length(y), y)</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A4</span><div>
+<p>Spusti <code>plot(1:5, 1:6)</code>. Prečítaj chybovú hlášku a príkaz oprav tak, aby fungoval.</p>
+<span class="hint">Pomôcka: Konštrukcia <code>try … catch</code> chybu zachytí, takže skript pobeží ďalej.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">% try/catch zachyti chybu, aby skript pokracoval dalej
+try
+    plot(1:5, 1:6)
+catch chyba
+    disp(chyba.message)
+end
+% Oprava: obe dlzky musia sediet
+figure
+plot(1:6, 1:6)</pre>
+<pre class="out">Specify the coordinates as vectors or matrices of the same size, or as a vector and a matrix that share the same length in at least one dimension.</pre>
+<div class="fig"><img src="obrazky_cv04/A4.png" alt="Výstup úlohy A4" loading="lazy"></div>
+<div class="note">Oba vektory musia mať <b>rovnakú dĺžku</b>, pretože každý bod potrebuje svoje <i>x</i> aj <i>y</i>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A5</span><div>
+<p>Vytvor <code>a = 0:0.3:1</code> a <code>b = linspace(0, 1, 4)</code> a porovnaj ich posledné prvky. Potom nakresli funkciu e<sup>−x</sup> na ⟨0, 5⟩ z 200 bodov a do nadpisu napíš vzorec s exponentom.</p>
+<span class="hint">Pomôcka: Exponent v nadpise: <code>title('e^{-x}')</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">a = 0:0.3:1
+b = linspace(0, 1, 4)
+% a konci cislom 0.9, jednotku nedosiahne - b konci presne na 1
+figure
+x = linspace(0, 5, 200);
+plot(x, exp(-x))
+title('e^{-x}')</pre>
+<pre class="out">a =
+         0    0.3000    0.6000    0.9000
+b =
+         0    0.3333    0.6667    1.0000</pre>
+<div class="fig"><img src="obrazky_cv04/A5.png" alt="Výstup úlohy A5" loading="lazy"></div>
+<div class="note">Dvojbodka sa zastaví na 0,9, lebo ďalší krok by prekročil 1. <code>linspace</code> trafí koniec <b>vždy presne</b>, preto je na grafy vhodnejší.</div>
+</details></div>
+
+
+<h3>B · Vzhľad čiary</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Do jedného grafu nakresli štyri krivky (30 bodov), každú iným LineSpec: <code>sin(x)</code> ako <code>'r-'</code>, <code>cos(x)</code> ako <code>'b--'</code>, <code>sin(x)+1</code> ako <code>'g:o'</code> a <code>cos(x)-1</code> ako <code>'k-.s'</code>. Do legendy napíš použité LineSpec.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 30);
+plot(x, sin(x), 'r-')
+hold on
+plot(x, cos(x), 'b--')
+plot(x, sin(x) + 1, 'g:o')
+plot(x, cos(x) - 1, 'k-.s')
+hold off
+legend('r-', 'b--', 'g:o', 'k-.s')</pre>
+<div class="fig"><img src="obrazky_cv04/B1.png" alt="Výstup úlohy B1" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Nakresli <code>sin(x)</code> z 20 bodov <b>iba štvorčekmi</b>, bez spojovacej čiary.</p>
+<span class="hint">Pomôcka: Stačí LineSpec, ktorý obsahuje len značku.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 20);
+plot(x, sin(x), 's')
+% Ak v LineSpec chyba styl ciary, ale je tam znacka, ciara sa nekresli.</pre>
+<div class="fig"><img src="obrazky_cv04/B2.png" alt="Výstup úlohy B2" loading="lazy"></div>
+<div class="note">Keď LineSpec obsahuje značku, ale žiadny štýl čiary, čiara sa <b>nenakreslí</b>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B3</span><div>
+<p>Nakresli <code>sin(x)</code> z 15 bodov takto: hrúbka čiary 3, fialová farba <code>[0.5 0 0.8]</code>, značky veľkosti 10 so <b>žltou výplňou</b> a <b>čiernym obrysom</b>.</p>
+<span class="hint">Pomôcka: Parametre <code>LineWidth</code>, <code>Color</code>, <code>MarkerSize</code>, <code>MarkerFaceColor</code>, <code>MarkerEdgeColor</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 15);
+plot(x, sin(x), '-o', ...
+     'LineWidth',       3, ...
+     'Color',           [0.5 0 0.8], ...
+     'MarkerSize',      10, ...
+     'MarkerFaceColor', 'y', ...
+     'MarkerEdgeColor', 'k')</pre>
+<div class="fig"><img src="obrazky_cv04/B3.png" alt="Výstup úlohy B3" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B4</span><div>
+<p>Nakresli dve sínusovky s hrúbkou 4. Prvá má farbu RGB <code>[0.85 0.33 0.10]</code>, druhá je posunutá o −0,3 a má farbu zapísanú ako hex <code>'#D95319'</code>. Vidíš medzi farbami rozdiel?</p>
+<span class="hint">Pomôcka: RGB je v rozsahu 0 až 1. Hex je reťazec začínajúci mriežkou.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+plot(x, sin(x), 'Color', [0.85 0.33 0.10], 'LineWidth', 4)
+hold on
+plot(x, sin(x) - 0.3, 'Color', '#D95319', 'LineWidth', 4)
+hold off
+legend('[0.85 0.33 0.10]', '#D95319')
+% Obe farby su prakticky rovnake - hex zapis je len iny sposob zapisu.</pre>
+<div class="fig"><img src="obrazky_cv04/B4.png" alt="Výstup úlohy B4" loading="lazy"></div>
+<div class="note">Farby sú prakticky rovnaké. Hex <code>D9 53 19</code> je v desiatkovej sústave 217, 83, 25, a po vydelení 255 vyjde 0,85; 0,33; 0,10.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B5</span><div>
+<p>Nakresli <code>sin(x)</code> na ⟨0, 4π⟩ z <b>500 bodov</b> so značkami <code>'o-'</code>. Výsledok je nečitateľná „húsenica“. Oprav to tak, aby sa značka nakreslila len v <b>každom 25. bode</b>.</p>
+<span class="hint">Pomôcka: <code>'MarkerIndices', 1:25:length(x)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 4*pi, 500);
+plot(x, sin(x), '-o', 'MarkerIndices', 1:25:length(x))</pre>
+<div class="fig"><img src="obrazky_cv04/B5.png" alt="Výstup úlohy B5" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B6</span><div>
+<p>V cykle <code>for</code> nakresli do jedného grafu deväť kriviek <code>sin(x) + k</code> pre <i>k</i> = 1 až 9, bez zadávania farby. Ktoré krivky majú rovnakú farbu? Vypíš zoznam predvolených farieb.</p>
+<span class="hint">Pomôcka: <code>get(gca, 'ColorOrder')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+hold on
+for k = 1:9
+    plot(x, sin(x) + k)
+end
+hold off
+% Krivky 8 a 9 maju rovnaku farbu ako 1 a 2 - farieb je len 7.
+C = get(gca, 'ColorOrder')</pre>
+<pre class="out">C =
+    0.0660    0.4430    0.7450
+    0.8660    0.3290         0
+    0.9290    0.6940    0.1250
+    0.5210    0.0860    0.8190
+    0.2310    0.6660    0.1960
+    0.1840    0.7450    0.9370
+    0.8190    0.0150    0.5450</pre>
+<div class="fig"><img src="obrazky_cv04/B6.png" alt="Výstup úlohy B6" loading="lazy"></div>
+<div class="note">Predvolených farieb je <b>sedem</b>, ôsma krivka preto začína znova od prvej. Hodnoty sú z MATLABu R2026a, staršie verzie mali paletu mierne odlišnú.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B7</span><div>
+<p>Výsledok príkazu <code>plot</code> ulož do premennej <code>h</code>. Cez ňu potom zmeň hrúbku čiary na 3, farbu na červenú a štýl na čiarkovaný. Nakoniec vypíš aktuálnu hrúbku a farbu.</p>
+<span class="hint">Pomôcka: <code>h.LineWidth = 3</code> alebo <code>set(h, 'Color', 'r')</code>; čítanie cez <code>get(h, 'Color')</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+h = plot(x, sin(x));
+h.LineWidth = 3;
+h.Color     = 'r';
+h.LineStyle = '--';
+sirka = h.LineWidth
+farba = get(h, 'Color')</pre>
+<pre class="out">sirka =
+     3
+farba =
+     1     0     0</pre>
+<div class="fig"><img src="obrazky_cv04/B7.png" alt="Výstup úlohy B7" loading="lazy"></div>
+<div class="note">Premenná <code>h</code> je <b>odkaz (handle)</b> na nakreslenú čiaru. Cez ňu sa dá meniť čokoľvek aj potom, čo je graf hotový. Farba <code>'r'</code> sa uloží ako RGB <code>[1 0 0]</code>.</div>
+</details></div>
+
+
+<h3>C · Popis a osi</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Nakresli napätie v sieti <i>u</i>(<i>t</i>) = 325·sin(2π·50·<i>t</i>) za prvých 40 ms. Čas zobraz v <b>milisekundách</b>. Pridaj nadpis, popisy oboch osí s jednotkami a mriežku.</p>
+<span class="hint">Pomôcka: Počítaj v sekundách, prepočet urob až pri kreslení: <code>plot(t*1000, u)</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 0.04, 1000);
+u = 325 * sin(2*pi*50*t);
+plot(t*1000, u, 'LineWidth', 1.5)
+title('Napatie v sieti 50 Hz')
+xlabel('cas t [ms]')
+ylabel('napatie u [V]')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/C1.png" alt="Výstup úlohy C1" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Vedľa seba (dva podgrafy) nakresli <code>sin</code> a <code>cos</code> s legendou. Vľavo legendu vytvor <b>zoznamom textov</b> (umiestnenie <code>southwest</code>), vpravo cez <code>DisplayName</code> (umiestnenie <code>eastoutside</code>).</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+subplot(1, 2, 1)
+plot(x, sin(x))
+hold on
+plot(x, cos(x))
+hold off
+legend('sin(x)', 'cos(x)', 'Location', 'southwest')
+title('zoznam textov')
+
+subplot(1, 2, 2)
+plot(x, sin(x), 'DisplayName', 'sin(x)')
+hold on
+plot(x, cos(x), 'DisplayName', 'cos(x)')
+hold off
+legend('Location', 'eastoutside')
+title('DisplayName')</pre>
+<div class="fig"><img src="obrazky_cv04/C2.png" alt="Výstup úlohy C2" loading="lazy"></div>
+<div class="note">Pri <code>DisplayName</code> je text priamo pri krivke, takže sa legenda nemôže pomiešať s poradím kriviek. Stačí potom napísať samotné <code>legend</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C3</span><div>
+<p>Nakresli <i>u</i><sub>C</sub> = 12(1 − e<sup>−t</sup>) a vyskúšaj TeX: nadpis so vzorcom s písmenom τ, os <i>x</i> s popisom ω<i>t</i>, os <i>y</i> s popisom <i>u</i><sub>C</sub> [V]. Potom cez <code>text</code> vypíš do grafu názov súboru <code>subor_vysledky.m</code> tromi spôsobmi: obyčajne, s <code>\_</code> a s <code>'Interpreter', 'none'</code>. Čo sa stane s podčiarkovníkom?</p>
+<span class="hint">Pomôcka: <code>_</code> = dolný index, <code>^</code> = horný index, <code>\tau</code>, <code>\omega</code> = grécke písmená, <code>{…}</code> zoskupí viac znakov.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 5, 200);
+plot(t, 12*(1 - exp(-t)))
+title('Nabijanie: u_C = U(1 - e^{-t/\tau})')
+xlabel('\omega t')
+ylabel('u_C [V]')
+text(2, 6, 'subor_vysledky.m')                        % ZLE: _v sa zmeni na dolny index
+text(2, 4, 'subor\_vysledky.m')                       % \_ = obycajne podciarknutie
+text(2, 2, 'subor_vysledky.m', 'Interpreter', 'none') % TeX uplne vypnuty</pre>
+<div class="fig"><img src="obrazky_cv04/C3.png" alt="Výstup úlohy C3" loading="lazy"></div>
+<div class="note">Pri prvom texte TeX zmenil <code>_v</code> na dolný index. Pomôže buď <code>\_</code>, alebo úplne vypnutý TeX. Rovnako treba dávať pozor na názvy súborov a premenných v nadpisoch.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C4</span><div>
+<p>Nakresli <code>tan(x)</code> na ⟨−π, π⟩ z 1000 bodov. Graf je nečitateľný, tak obmedz os <i>y</i> na ⟨−5, 5⟩. Potom skús <code>xlim([5 1])</code> a prečítaj chybu.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(-pi, pi, 1000);
+plot(x, tan(x))
+ylim([-5 5])
+xlim([-pi pi])
+title('tan(x) s orezanou osou y')
+try
+    xlim([5 1])
+catch chyba
+    disp(chyba.message)
+end</pre>
+<pre class="out">Limits must be a 2-element vector of increasing numeric values.</pre>
+<div class="fig"><img src="obrazky_cv04/C4.png" alt="Výstup úlohy C4" loading="lazy"></div>
+<div class="note">Všimni si zvislé čiary pri ±π/2. Nie sú súčasťou funkcie: MATLAB len <b>spojil posledný bod pred asymptotou s prvým bodom za ňou</b>. To je presne princíp z úlohy A1.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C5</span><div>
+<p>Nakresli kružnicu <i>x</i> = cos <i>t</i>, <i>y</i> = sin <i>t</i> do dvoch podgrafov: vľavo bez úprav, vpravo s <code>axis equal</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 2*pi, 200);
+subplot(1, 2, 1)
+plot(cos(t), sin(t))
+title('bez axis equal')
+subplot(1, 2, 2)
+plot(cos(t), sin(t))
+axis equal
+title('axis equal')</pre>
+<div class="fig"><img src="obrazky_cv04/C5.png" alt="Výstup úlohy C5" loading="lazy"></div>
+<div class="note">Bez <code>axis equal</code> má každá os inú mierku a z kružnice je elipsa.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C6</span><div>
+<p>Nakresli <i>y</i> = <i>x</i>·e<sup>−x</sup> na ⟨0, 4⟩. Pomocou <code>max</code> nájdi maximum a vyznač ho: červeným bodom, zvislou čiarou <code>xline</code> s popisom a textom s hodnotou na tri desatinné miesta. Pridaj aj vodorovnú čiaru <code>yline(0)</code>.</p>
+<span class="hint">Pomôcka: <code>[ymax, i] = max(y)</code> vráti hodnotu aj jej <b>index</b>, takže <i>x</i>-ová súradnica je <code>x(i)</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 4, 400);
+y = x .* exp(-x);
+plot(x, y, 'LineWidth', 1.5)
+[ymax, i] = max(y);
+hold on
+plot(x(i), ymax, 'ro', 'MarkerFaceColor', 'r')
+hold off
+xline(x(i), '--', 'maximum')
+yline(0)
+text(x(i) + 0.1, ymax + 0.01, sprintf('max = %.3f', ymax))
+ylim([-0.05 0.45])</pre>
+<div class="fig"><img src="obrazky_cv04/C6.png" alt="Výstup úlohy C6" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C7</span><div>
+<p>Nakresli <code>sin(x)</code> na ⟨0, 2π⟩. Značky na osi <i>x</i> nastav na násobky π/2 s popismi 0, π/2, π, 3π/2, 2π. Písmo osí zväčši na 12 a zapni jemnú mriežku.</p>
+<span class="hint">Pomôcka: <code>xticks</code>, <code>xticklabels</code>, <code>set(gca, 'FontSize', 12)</code>, <code>grid minor</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+plot(x, sin(x), 'LineWidth', 1.5)
+xticks(0:pi/2:2*pi)
+xticklabels({'0', '\pi/2', '\pi', '3\pi/2', '2\pi'})
+xlim([0 2*pi])
+set(gca, 'FontSize', 12)
+grid on
+grid minor</pre>
+<div class="fig"><img src="obrazky_cv04/C7.png" alt="Výstup úlohy C7" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C8</span><div>
+<p>Nakresli funkciu 10<sup>x</sup> na ⟨0, 5⟩ dvakrát vedľa seba: raz s lineárnou osou <i>y</i>, raz príkazom <code>semilogy</code>. Čo sa stalo s krivkou?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = 0:0.1:5;
+subplot(1, 2, 1)
+plot(x, 10.^x)
+title('linearna os y')
+subplot(1, 2, 2)
+semilogy(x, 10.^x)
+title('semilogy')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/C8.png" alt="Výstup úlohy C8" loading="lazy"></div>
+<div class="note">Na logaritmickej osi je <b>exponenciála priamka</b>. Preto sa logaritmické osi používajú všade tam, kde hodnoty rastú o rády, napríklad pri frekvenčných charakteristikách.</div>
+</details></div>
+
+
+<h3>D · Viac kriviek a viac grafov</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Do jedného grafu nakresli <code>sin(x)</code>, <code>cos(x)</code> a <code>sin(2x)</code> s legendou. Potom vyskúšaj to isté <b>bez</b> <code>hold on</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+plot(x, sin(x))
+hold on
+plot(x, cos(x))
+plot(x, sin(2*x))
+hold off
+legend('sin(x)', 'cos(x)', 'sin(2x)')
+% Bez hold on by zostala len posledna krivka sin(2x).</pre>
+<div class="fig"><img src="obrazky_cv04/D1.png" alt="Výstup úlohy D1" loading="lazy"></div>
+<div class="note">Bez <code>hold on</code> každý <code>plot</code> zmaže predchádzajúci a ostane len posledná krivka.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Nakresli <code>sin</code>, <code>cos</code> a <code>sin·cos</code> jediným príkazom <code>plot</code>, každú iným štýlom a všetky s hrúbkou 1,5.</p>
+<span class="hint">Pomôcka: Dvojice <code>x, y, LineSpec</code> sa dajú za sebou opakovať. Parameter na konci platí pre všetky krivky.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+plot(x, sin(x), 'b-', x, cos(x), 'r--', x, sin(x).*cos(x), 'k:', 'LineWidth', 1.5)
+legend('sin', 'cos', 'sin*cos')</pre>
+<div class="fig"><img src="obrazky_cv04/D2.png" alt="Výstup úlohy D2" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Vytvor maticu <code>Y</code>, ktorej stĺpce sú <code>sin(x)</code>, <code>sin(2x)</code> a <code>sin(3x)</code>, a nakresli ju príkazom <code>plot(x, Y)</code>. Over rozmer matice <code>Y</code>.</p>
+<span class="hint">Pomôcka: Aby sa z vektorov dali poskladať stĺpce, <code>x</code> musí byť stĺpcový: <code>x = x(:)</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+x = x(:);                        % stlpcovy vektor
+Y = [sin(x), sin(2*x), sin(3*x)];
+size(Y)
+plot(x, Y)
+legend('sin(x)', 'sin(2x)', 'sin(3x)')</pre>
+<pre class="out">ans =
+   200     3</pre>
+<div class="fig"><img src="obrazky_cv04/D3.png" alt="Výstup úlohy D3" loading="lazy"></div>
+<div class="note"><code>plot</code> kreslí každý <b>stĺpec</b> matice ako samostatnú krivku. Tak sa v praxi kreslia merania z viacerých kanálov naraz.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D4</span><div>
+<p>Pomocou <code>subplot</code> nakresli mriežku 2×2 s funkciami sin <i>x</i>, cos <i>x</i>, <i>x</i>² a e<sup>−x</sup>. Každý graf má vlastný nadpis a celá mriežka spoločný nadpis.</p>
+<span class="hint">Pomôcka: Spoločný nadpis pre <code>subplot</code>: <code>sgtitle</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+subplot(2, 2, 1); plot(x, sin(x));      title('sin(x)')
+subplot(2, 2, 2); plot(x, cos(x));      title('cos(x)')
+subplot(2, 2, 3); plot(x, x.^2);        title('x^2')
+subplot(2, 2, 4); plot(x, exp(-x));     title('e^{-x}')
+sgtitle('Styri funkcie')</pre>
+<div class="fig"><img src="obrazky_cv04/D4.png" alt="Výstup úlohy D4" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D5</span><div>
+<p>Vytvor rozloženie, kde <b>horný graf zaberá celú šírku</b> a pod ním sú dva menšie vedľa seba.</p>
+<span class="hint">Pomôcka: <code>subplot(2, 2, [1 2])</code> spojí políčka 1 a 2.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 4*pi, 400);
+subplot(2, 2, [1 2])
+plot(x, sin(x).*exp(-x/6))
+title('policka 1 a 2 spolu')
+subplot(2, 2, 3)
+plot(x, sin(x))
+title('policko 3')
+subplot(2, 2, 4)
+plot(x, exp(-x/6))
+title('policko 4')</pre>
+<div class="fig"><img src="obrazky_cv04/D5.png" alt="Výstup úlohy D5" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D6</span><div>
+<p>Pomocou <code>tiledlayout</code> 2×3 a cyklu nakresli <code>sin(k*x)</code> pre <i>k</i> = 1 až 6. Nadpisy vytvor cez <code>sprintf</code>, pridaj spoločný nadpis, spoločné popisy osí a tesné rozostupy.</p>
+<span class="hint">Pomôcka: <code>'TileSpacing', 'compact'</code>, v cykle <code>nexttile</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+tl = tiledlayout(2, 3, 'TileSpacing', 'compact', 'Padding', 'compact');
+for k = 1:6
+    nexttile
+    plot(x, sin(k*x))
+    title(sprintf('sin(%dx)', k))
+end
+title(tl, 'Sest grafov cez tiledlayout')
+xlabel(tl, 'x')
+ylabel(tl, 'y')</pre>
+<div class="fig"><img src="obrazky_cv04/D6.png" alt="Výstup úlohy D6" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D7</span><div>
+<p>Vytvor dve okná <code>figure(1)</code> a <code>figure(2)</code> a do každého nakresli iný graf. Druhému oknu nastav názov a bielu farbu pozadia. Potom sa vráť do okna 1 a dokresli doňho ďalšiu krivku. Nakoniec vypíš číslo aktuálneho okna.</p>
+<span class="hint">Pomôcka: <code>set(gcf, 'Name', …)</code>, <code>get(gcf, 'Number')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure(1)
+plot(1:10, (1:10).^2)
+title('okno 1')
+
+figure(2)
+set(gcf, 'Name', 'Moje druhe okno', 'Color', 'w')
+plot(1:10, sqrt(1:10))
+title('okno 2')
+
+figure(1)                 % prepnem spat na okno 1
+hold on
+plot(1:10, 10*(1:10))
+hold off
+cisloOkna = get(gcf, 'Number')</pre>
+<pre class="out">cisloOkna =
+     1</pre>
+<div class="fig"><img src="obrazky_cv04/D7_1.png" alt="Výstup úlohy D7" loading="lazy"></div>
+<div class="fig"><img src="obrazky_cv04/D7_2.png" alt="Výstup úlohy D7" loading="lazy"></div>
+<div class="note"><code>figure(1)</code> nevytvára nové okno, ak už existuje. Len ho urobí <b>aktuálnym</b>, takže ďalší <code>plot</code> pôjde doňho.</div>
+</details></div>
+
+
+<h3>E · Ďalšie typy grafov</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Počty známok <code>[4 9 8 5 2]</code> zobraz v mriežke 2×2 štyrmi spôsobmi: <code>bar</code>, <code>barh</code> a pre dve triedy (matica 5×2) ako <b>skupiny</b> a ako <b>naskladané</b> stĺpce.</p>
+<span class="hint">Pomôcka: <code>bar(M)</code> pre maticu; <code>bar(M, 'stacked')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+znamky = [4 9 8 5 2];
+skupiny = [4 3; 9 7; 8 9; 5 6; 2 3];
+
+subplot(2, 2, 1); bar(znamky);               title('bar')
+subplot(2, 2, 2); barh(znamky);              title('barh')
+subplot(2, 2, 3); bar(skupiny);              title('bar - skupiny')
+subplot(2, 2, 4); bar(skupiny, 'stacked');   title('bar - stacked')</pre>
+<div class="fig"><img src="obrazky_cv04/E1.png" alt="Výstup úlohy E1" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E2</span><div>
+<p>Nakresli diskrétny signál <i>x</i>[<i>n</i>] = 0,8<sup>n</sup> pre <i>n</i> = 0 až 20 príkazom <code>stem</code> s vyplnenými krúžkami a s popisom osí.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+n = 0:20;
+x = 0.8.^n;
+stem(n, x, 'filled')
+xlabel('n')
+ylabel('x[n]')
+title('x[n] = 0.8^n')</pre>
+<div class="fig"><img src="obrazky_cv04/E2.png" alt="Výstup úlohy E2" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E3</span><div>
+<p>Digitálny signál <code>[0 1 1 0 1 0 0 1 1 1 0]</code> nakresli príkazom <code>stairs</code>. Porovnaj ho s tým, čo by nakreslil <code>plot</code>. Prečo je tu <code>stairs</code> správnejší?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+n = 0:10;
+signal = [0 1 1 0 1 0 0 1 1 1 0];
+stairs(n, signal, 'LineWidth', 2)
+ylim([-0.2 1.2])
+title('Digitalny signal')</pre>
+<div class="fig"><img src="obrazky_cv04/E3.png" alt="Výstup úlohy E3" loading="lazy"></div>
+<div class="note">Digitálny signál drží hodnotu až do ďalšej zmeny a mení sa skokom. <code>plot</code> by úrovne spojil šikmými čiarami, ktoré v skutočnosti neexistujú.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E4</span><div>
+<p>Vygeneruj 200 náhodných bodov <code>x = randn(1,200)</code>, <code>y = x + 0.5*randn(1,200)</code> a nakresli ich cez <code>scatter</code>: veľkosť každého bodu náhodná, farba podľa <i>y</i>, priehľadnosť 0,6 a farebná škála.</p>
+<span class="hint">Pomôcka: <code>rng(1)</code> na začiatku zaručí, že vyjdú vždy tie isté „náhodné“ čísla.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rng(1)
+figure
+x = randn(1, 200);
+y = x + 0.5*randn(1, 200);
+velkost = 10 + 60*rand(1, 200);
+scatter(x, y, velkost, y, 'filled', 'MarkerFaceAlpha', 0.6)
+colorbar
+xlabel('x'); ylabel('y')</pre>
+<div class="fig"><img src="obrazky_cv04/E4.png" alt="Výstup úlohy E4" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E5</span><div>
+<p>Vygeneruj 1000 hodnôt <code>randn</code> a nakresli tri histogramy vedľa seba: s 20 intervalmi, so šírkou intervalu 0,1 a s osou <i>y</i> ako pravdepodobnosťou.</p>
+<span class="hint">Pomôcka: <code>'BinWidth'</code>, <code>'Normalization', 'probability'</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rng(2)
+figure
+data = randn(1, 1000);
+subplot(1, 3, 1); histogram(data, 20);                                 title('20 intervalov')
+subplot(1, 3, 2); histogram(data, 'BinWidth', 0.1);                    title('BinWidth 0.1')
+subplot(1, 3, 3); histogram(data, 20, 'Normalization', 'probability'); title('pravdepodobnost')</pre>
+<div class="fig"><img src="obrazky_cv04/E5.png" alt="Výstup úlohy E5" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E6</span><div>
+<p>Vedľa seba nakresli koláčový graf obľúbených jazykov (45, 25, 20, 10 % pre Python, C, MATLAB, HTML) s popismi a graf <code>area</code> mesačnej spotreby energie.</p>
+<span class="hint">Pomôcka: <code>pie(hodnoty, {'Python', 'C', …})</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+subplot(1, 2, 1)
+podiely = [45 25 20 10];
+pie(podiely, {'Python', 'C', 'MATLAB', 'HTML'})
+title('Oblubeny jazyk')
+
+subplot(1, 2, 2)
+mesiace = 1:12;
+spotreba = [310 295 270 240 215 190 185 200 225 260 290 320];
+area(mesiace, spotreba, 'FaceAlpha', 0.4)
+xlim([1 12])
+title('Spotreba [kWh]')</pre>
+<div class="fig"><img src="obrazky_cv04/E6.png" alt="Výstup úlohy E6" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E7</span><div>
+<p>Pri meraní si namerali prúdy 0,21; 0,39; 0,62; 0,79 a 1,02 A pri napätiach 1 až 5 V. Neistoty boli 0,03; 0,03; 0,04; 0,05 a 0,05 A. Nakresli meranie aj s chybovými úsečkami.</p>
+<span class="hint">Pomôcka: <code>errorbar(x, y, neistota, 'o')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+napatie   = [1 2 3 4 5];
+prud      = [0.21 0.39 0.62 0.79 1.02];
+neistota  = [0.03 0.03 0.04 0.05 0.05];
+errorbar(napatie, prud, neistota, 'o', 'MarkerFaceColor', 'b')
+xlabel('U [V]'); ylabel('I [A]')
+xlim([0.5 5.5])
+grid on
+title('Meranie s neistotou')</pre>
+<div class="fig"><img src="obrazky_cv04/E7.png" alt="Výstup úlohy E7" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E8</span><div>
+<p>Nakresli v polárnych súradniciach krivku <i>r</i> = |cos 2θ|.</p>
+<span class="hint">Pomôcka: <code>polarplot(theta, r)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+theta = linspace(0, 2*pi, 400);
+r = abs(cos(2*theta));
+polarplot(theta, r, 'LineWidth', 1.5)
+title('r = |cos(2\theta)|')</pre>
+<div class="fig"><img src="obrazky_cv04/E8.png" alt="Výstup úlohy E8" loading="lazy"></div>
+</details></div>
+
+
+<h3>F · Praktické príklady z elektrotechniky</h3>
+
+<div class="task"><div class="q"><span class="num">F1</span><div>
+<p>Nakresli nabíjanie kondenzátora <i>C</i> = 100 μF na <i>U</i> = 12 V cez odpory 10, 22 a 47 kΩ do jedného grafu. Legendu vytvor cez <code>DisplayName</code> a <code>sprintf</code>. Pre prvý odpor vyznač bod v čase <i>t</i> = τ a pridaj k nemu popis „63 %“. Napätie zdroja vyznač čiarkovanou čiarou, ktorá nebude v legende.</p>
+<span class="hint">Pomôcka: <i>u</i><sub>C</sub> = <i>U</i>(1 − e<sup>−t/τ</sup>), τ = <i>RC</i>; <code>'HandleVisibility', 'off'</code> vynechá čiaru z legendy.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+U = 12;  C = 100e-6;  R = [10e3 22e3 47e3];
+t = linspace(0, 15, 500);
+hold on
+for k = 1:3
+    tau = R(k) * C;
+    plot(t, U*(1 - exp(-t/tau)), 'LineWidth', 1.5, ...
+        'DisplayName', sprintf('R = %g kOhm', R(k)/1000))
+end
+tau1 = R(1) * C;
+plot(tau1, U*(1 - exp(-1)), 'ko', 'MarkerFaceColor', 'k', 'HandleVisibility', 'off')
+text(tau1 + 0.3, U*(1 - exp(-1)) - 0.6, '63 % pri t = \tau')
+yline(U, '--', 'U = 12 V', 'HandleVisibility', 'off')
+hold off
+xlabel('t [s]'); ylabel('u_C [V]')
+legend('Location', 'southeast')
+ylim([0 13.5])</pre>
+<div class="fig"><img src="obrazky_cv04/F1.png" alt="Výstup úlohy F1" loading="lazy"></div>
+<div class="note">V čase τ je kondenzátor nabitý na 1 − e<sup>−1</sup> ≈ <b>63 %</b>, bez ohľadu na hodnotu <i>R</i> a <i>C</i>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F2</span><div>
+<p>Obdĺžnikový signál 50 Hz sa dá poskladať z nepárnych harmonických: (4/π)·sin(<i>k</i>ω<i>t</i>)/<i>k</i> pre <i>k</i> = 1, 3, 5, … Nakresli do mriežky 2×2 súčet harmonických až do 1., 3., 7. a 21.</p>
+<span class="hint">Pomôcka: Dva vnorené cykly: vonkajší cez počty <code>[1 3 7 21]</code>, vnútorný <code>for k = 1:2:p</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 0.04, 2000);
+pocty = [1 3 7 21];
+tiledlayout(2, 2, 'TileSpacing', 'compact')
+for p = pocty
+    y = zeros(size(t));
+    for k = 1:2:p
+        y = y + 4/pi * sin(2*pi*50*k*t) / k;
+    end
+    nexttile
+    plot(t*1000, y)
+    title(sprintf('harmonicke do %d.', p))
+    ylim([-1.5 1.5])
+end</pre>
+<div class="fig"><img src="obrazky_cv04/F2.png" alt="Výstup úlohy F2" loading="lazy"></div>
+<div class="note">Pri hranách ostávajú malé prekmity, ktoré nezmiznú ani pri veľkom počte harmonických. Volá sa to <b>Gibbsov jav</b>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F3</span><div>
+<p>Nakresli dvojcestne usmernené napätie |325·sin(2π·50·<i>t</i>)| za 40 ms dvakrát pod sebou: hore ako spojitý priebeh, dole ako vzorky odobraté každú 1 ms.</p>
+<span class="hint">Pomôcka: Pod sebou: <code>subplot(2, 1, …)</code>; vzorky: <code>tn = 0:0.001:0.04</code> a <code>stem</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t  = linspace(0, 0.04, 1000);
+tn = 0:0.001:0.04;
+subplot(2, 1, 1)
+plot(t*1000, abs(325*sin(2*pi*50*t)))
+title('dvojcestne usmernenie')
+subplot(2, 1, 2)
+stem(tn*1000, abs(325*sin(2*pi*50*tn)), 'filled', 'MarkerSize', 3)
+title('vzorky kazdu 1 ms')
+xlabel('t [ms]')</pre>
+<div class="fig"><img src="obrazky_cv04/F3.png" alt="Výstup úlohy F3" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F4</span><div>
+<p>Nakresli napätie 325 V a prúd 5 A, ktorý sa oneskoruje o 45°, do jedného grafu s <b>dvoma osami y</b>.</p>
+<span class="hint">Pomôcka: <code>yyaxis left</code> / <code>yyaxis right</code>; 45° = π/4.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 0.04, 1000);
+u = 325 * sin(2*pi*50*t);
+i = 5 * sin(2*pi*50*t - pi/4);
+yyaxis left
+plot(t*1000, u)
+ylabel('u [V]')
+yyaxis right
+plot(t*1000, i)
+ylabel('i [A]')
+xlabel('t [ms]')
+title('Prud sa oneskoruje o 45 stupnov')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/F4.png" alt="Výstup úlohy F4" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F5</span><div>
+<p>Nakresli VA charakteristiku diódy podľa Shockleyho rovnice <i>I</i> = <i>I</i><sub>S</sub>(e<sup>U/(n·U<sub>T</sub>)</sup> − 1), kde <i>I</i><sub>S</sub> = 10<sup>−12</sup> A, <i>n</i> = 1,5, <i>U</i><sub>T</sub> = 25,85 mV a <i>U</i> ∈ ⟨0; 0,8⟩ V. Vľavo s lineárnou osou (prúd v mA), vpravo cez <code>semilogy</code>.</p>
+<span class="hint">Pomôcka: Pozor na bodové operácie: <code>exp(U/(n*UT))</code> funguje pre celý vektor naraz.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+Is = 1e-12;  n = 1.5;  UT = 0.02585;
+U = linspace(0, 0.8, 400);
+I = Is * (exp(U/(n*UT)) - 1);
+subplot(1, 2, 1)
+plot(U, I*1000, 'LineWidth', 1.5)
+xlabel('U [V]'); ylabel('I [mA]')
+title('linearna os')
+grid on
+subplot(1, 2, 2)
+semilogy(U, I, 'LineWidth', 1.5)
+xlabel('U [V]'); ylabel('I [A]')
+title('semilogy - exponenciala je priamka')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/F5.png" alt="Výstup úlohy F5" loading="lazy"></div>
+<div class="note">Na lineárnej osi to vyzerá, že dióda „nevedie“ až do 0,6 V. Logaritmická os ukáže, že prúd rastie exponenciálne celý čas, len je spočiatku nepatrný.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F6</span><div>
+<p>Nakresli funkciu sin(<i>x</i>)/<i>x</i> na ⟨−20, 20⟩ <b>bez vytvárania vektora x</b>, pomocou anonymnej funkcie a <code>fplot</code>.</p>
+<span class="hint">Pomôcka: <code>f = @(x) sin(x)./x;</code> a <code>fplot(f, [-20 20])</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+f = @(x) sin(x) ./ x;
+fplot(f, [-20 20], 'LineWidth', 1.5)
+title('sin(x)/x')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/F6.png" alt="Výstup úlohy F6" loading="lazy"></div>
+<div class="note"><code>fplot</code> si body vyberie sám a v miestach, kde sa funkcia rýchlo mení, ich zahustí.</div>
+</details></div>
+
+
+<h3>G · Tretí rozmer</h3>
+
+<div class="task"><div class="q"><span class="num">G1</span><div>
+<p>Nakresli skrutkovicu <i>x</i> = cos <i>t</i>, <i>y</i> = sin <i>t</i>, <i>z</i> = <i>t</i> s tromi závitmi. Popíš všetky tri osi.</p>
+<span class="hint">Pomôcka: Tri závity = <i>t</i> od 0 po 6π; <code>plot3</code>, <code>zlabel</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+t = linspace(0, 6*pi, 600);
+plot3(cos(t), sin(t), t, 'LineWidth', 2)
+xlabel('x'); ylabel('y'); zlabel('z')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv04/G1.png" alt="Výstup úlohy G1" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G2</span><div>
+<p>Spusti <code>[X, Y] = meshgrid(1:3, 1:4)</code> a pozri sa na obe matice. Vysvetli, čo obsahujú.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">[X, Y] = meshgrid(1:3, 1:4)
+% X ma v kazdom riadku 1 2 3, Y ma v kazdom stlpci 1 2 3 4.
+% Dvojica (X(i,j), Y(i,j)) prejde vsetkych 12 bodov mriezky.</pre>
+<pre class="out">X =
+     1     2     3
+     1     2     3
+     1     2     3
+     1     2     3
+Y =
+     1     1     1
+     2     2     2
+     3     3     3
+     4     4     4</pre>
+<div class="note"><code>X</code> má v každom <b>riadku</b> hodnoty 1 2 3, <code>Y</code> má v každom <b>stĺpci</b> hodnoty 1 2 3 4. Dvojica <code>(X(i,j), Y(i,j))</code> tak postupne prejde všetkých 12 bodov mriežky. Práve preto sa z nich dá vypočítať <code>Z</code> pre plochu.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G3</span><div>
+<p>Na mriežke 60×60 z ⟨−8, 8⟩ nakresli „sombrero“ <i>z</i> = sin(<i>r</i>)/<i>r</i>, kde <i>r</i> = √(<i>x</i>² + <i>y</i>²). Pridaj farebnú škálu.</p>
+<span class="hint">Pomôcka: V strede je <i>r</i> = 0 a delenie nulou dá <code>NaN</code>. Pripočítaj k <i>r</i> malé číslo <code>eps</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+[X, Y] = meshgrid(linspace(-8, 8, 60));
+R = sqrt(X.^2 + Y.^2) + eps;     % eps zabrani deleniu nulou
+Z = sin(R) ./ R;
+surf(X, Y, Z)
+colorbar
+title('sin(r)/r')</pre>
+<div class="fig"><img src="obrazky_cv04/G3.png" alt="Výstup úlohy G3" loading="lazy"></div>
+<div class="note"><code>eps</code> je najmenší rozdiel medzi dvoma číslami s pohyblivou desatinnou čiarkou, približne 2,2·10<sup>−16</sup>. Výsledok nezmení, ale zabráni deleniu nulou.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G4</span><div>
+<p>Pre <i>z</i> = <i>x</i>·e<sup>−x²−y²</sup> na ⟨−2, 2⟩² nakresli vedľa seba <code>mesh</code>, <code>surf</code> a <code>contour</code> s 15 vrstevnicami.</p>
+<span class="hint">Pomôcka: Vo vzorci musia byť bodové operácie <code>.*</code> a <code>.^</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+[X, Y] = meshgrid(linspace(-2, 2, 40));
+Z = X .* exp(-X.^2 - Y.^2);
+subplot(1, 3, 1); mesh(X, Y, Z);        title('mesh')
+subplot(1, 3, 2); surf(X, Y, Z);        title('surf')
+subplot(1, 3, 3); contour(X, Y, Z, 15); title('contour'); axis equal</pre>
+<div class="fig"><img src="obrazky_cv04/G4.png" alt="Výstup úlohy G4" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G5</span><div>
+<p>Tú istú plochu nakresli dvakrát: vľavo s plynulým tieňovaním a farebnou mapou <code>hot</code>, vpravo pri pohľade zhora s farebnou škálou.</p>
+<span class="hint">Pomôcka: <code>shading interp</code>, <code>colormap(gca, hot)</code>, <code>view(2)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+[X, Y] = meshgrid(linspace(-2, 2, 50));
+Z = X .* exp(-X.^2 - Y.^2);
+subplot(1, 2, 1)
+surf(X, Y, Z)
+shading interp
+colormap(gca, hot)
+title('shading interp, hot')
+subplot(1, 2, 2)
+surf(X, Y, Z)
+shading interp
+view(2)                       % pohlad zhora
+colorbar
+title('view(2)')</pre>
+<div class="fig"><img src="obrazky_cv04/G5.png" alt="Výstup úlohy G5" loading="lazy"></div>
+</details></div>
+
+
+<h3>H · Uloženie grafu</h3>
+
+<div class="task"><div class="q"><span class="num">H1</span><div>
+<p>Nakresli ľubovoľný graf a ulož ho trikrát: ako PNG s rozlíšením 300 dpi, ako vektorové PDF a pre porovnanie aj cez <code>saveas</code>. Potom vypíš názvy a veľkosti vzniknutých súborov.</p>
+<span class="hint">Pomôcka: <code>exportgraphics</code>; zoznam súborov: <code>dir('moj_graf*')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">figure
+x = linspace(0, 2*pi, 200);
+plot(x, sin(x), 'LineWidth', 1.5)
+title('Graf na ulozenie')
+exportgraphics(gcf, 'moj_graf.png', 'Resolution', 300)
+exportgraphics(gcf, 'moj_graf.pdf', 'ContentType', 'vector')
+saveas(gcf, 'moj_graf_saveas.png')
+subory = dir('moj_graf*');
+for k = 1:numel(subory)
+    fprintf('%-22s %7.1f kB\n', subory(k).name, subory(k).bytes/1024);
+end</pre>
+<pre class="out">moj_graf.pdf              18.2 kB
+moj_graf.png              57.1 kB
+moj_graf_saveas.png       25.9 kB</pre>
+<div class="fig"><img src="obrazky_cv04/H1.png" alt="Výstup úlohy H1" loading="lazy"></div>
+<div class="note">Súbory sa uložia do aktuálneho priečinka MATLABu (<code>pwd</code>). <code>saveas</code> ukladá obrázok tak, ako vyzerá na obrazovke, aj s veľkým bielym okrajom. <code>exportgraphics</code> okraj oreže a rozlíšenie mu môžeš nastaviť.</div>
+</details></div>
+
+
+<h3>I · Bonusová úloha</h3>
+
+<div class="task"><div class="q"><span class="num">I1</span><div>
+<p>Simuluj meranie teploty za 24 hodín každých 15 minút: <code>T = 15 + 7*sin(2*pi*(t-9)/24) + 0.8*randn(size(t))</code>. Vytvor prehľad 2×2 so spoločným nadpisom: (1) priebeh teploty s vyznačeným maximom a minimom a ich hodnotami v nadpise, (2) histogram, (3) hodinové priemery ako stĺpcový graf, (4) odchýlka od priemeru ako <code>stem</code>.</p>
+<span class="hint">Pomôcka: 96 meraní = 24 hodín × 4. <code>reshape(T, 4, 24)</code> dá do každého stĺpca jednu hodinu, <code>mean</code> potom spriemeruje stĺpce.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">rng(3)
+figure
+t = 0:0.25:23.75;                                  % 96 merani, kazdych 15 minut
+T = 15 + 7*sin(2*pi*(t - 9)/24) + 0.8*randn(size(t));
+
+tl = tiledlayout(2, 2, 'TileSpacing', 'compact');
+
+nexttile
+plot(t, T)
+[Tmax, imax] = max(T);
+[Tmin, imin] = min(T);
+hold on
+plot(t(imax), Tmax, 'r^', 'MarkerFaceColor', 'r')
+plot(t(imin), Tmin, 'bv', 'MarkerFaceColor', 'b')
+hold off
+xlabel('cas [h]'); ylabel(['T [' char(176) 'C]'])   % char(176) je znak stupna
+title(sprintf('max %.1f, min %.1f', Tmax, Tmin))
+xlim([0 24])
+
+nexttile
+histogram(T, 15)
+xlabel(['T [' char(176) 'C]']); title('rozdelenie')
+
+nexttile
+hodinove = mean(reshape(T, 4, 24));                % 4 merania za hodinu
+bar(0:23, hodinove)
+xlabel('hodina'); title('hodinove priemery')
+
+nexttile
+odchylka = T - mean(T);
+stem(t, odchylka, 'filled', 'MarkerSize', 2)
+xlabel('cas [h]'); title('odchylka od priemeru')
+xlim([0 24])
+
+title(tl, 'Meranie teploty za 24 hodin')</pre>
+<div class="fig"><img src="obrazky_cv04/I1.png" alt="Výstup úlohy I1" loading="lazy"></div>
+<div class="note">Toto je typická úloha z praxe: z jedného merania štyri rôzne pohľady na dáta. Každý z nich ukáže niečo iné.</div>
+</details></div>
+
+<!-- /LEKCIA 4 -->
+
+<!-- ============ LEKCIA 5 ============ -->
+<h2>Lekcia 5 — Práca so súbormi a nameranými dátami
+  <span class="sub">save a load, CSV a Excel, tabuľky, chýbajúce hodnoty, šum, polyfit, zápis protokolu — pri každom riešení je skutočný výstup z MATLABu</span>
+</h2>
+
+<div class="note" style="margin:0 0 18px">Všetky úlohy pracujú so súbormi v priečinku <code>data</code>. Aktuálny priečinok MATLABu preto musí byť <code>cvicenia</code> (over si to príkazom <code>pwd</code>). Dátové súbory si pokojne otvor aj v Poznámkovom bloku — uvidíš, ako naozaj vyzerajú.</div>
+
+<h3>A · Súbory a cesty</h3>
+
+<div class="task"><div class="q"><span class="num">A1</span><div>
+<p>Pomocou <code>fullfile</code> poskladaj cestu k súboru <code>ohm.csv</code> v priečinku <code>data</code> a over, či súbor existuje. Potom over aj súbor, ktorý neexistuje.</p>
+<span class="hint">Pomôcka: <code>isfile</code> vráti <code>1</code> alebo <code>0</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">subor = fullfile('data', 'ohm.csv')
+isfile(subor)
+isfile(fullfile('data', 'neexistuje.csv'))</pre>
+<pre class="out">subor =
+    'data\ohm.csv'
+ans =
+  logical
+   1
+ans =
+  logical
+   0</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A2</span><div>
+<p>Vypíš všetky CSV súbory v priečinku <code>data</code> aj s ich veľkosťou v bajtoch.</p>
+<span class="hint">Pomôcka: <code>s = dir(fullfile('data', '*.csv'))</code> vráti pole štruktúr s položkami <code>name</code> a <code>bytes</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">s = dir(fullfile('data', '*.csv'));
+for k = 1:numel(s)
+    fprintf('%-20s %6d B\n', s(k).name, s(k).bytes);
+end</pre>
+<pre class="out">ohm.csv                 107 B
+ohm_excel.csv           107 B
+rc_osciloskop.csv      6604 B
+ziaci.csv               247 B</pre>
+<div class="note">Hviezdička <code>*</code> zastupuje ľubovoľný text — <code>*.csv</code> sú všetky súbory s príponou csv. Súbor <code>teplota.xlsx</code> sa preto nevypísal.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">A3</span><div>
+<p>Skús načítať súbor s preklepom <code>data/ohm.cvs</code> a prečítaj chybovú hlášku.</p>
+<span class="hint">Pomôcka: <code>try … catch chyba</code>, potom <code>disp(chyba.message)</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">try
+    M = readmatrix(fullfile('data', 'ohm.cvs'));
+catch chyba
+    disp(chyba.message)
+end</pre>
+<pre class="out">Unable to find or open 'data\ohm.cvs'. Check the path and filename or file permissions.</pre>
+</details></div>
+
+
+<h3>B · Vlastné premenné — save a load</h3>
+
+<div class="task"><div class="q"><span class="num">B1</span><div>
+<p>Vytvor premenné <code>U = 0:2:10</code>, <code>I = U/470*1000</code>, textovú <code>poznamka</code> a pomocnú <code>docasne = 42</code>. Do súboru <code>moje_meranie.mat</code> ulož <b>len</b> <code>U</code>, <code>I</code> a <code>poznamka</code>. Bez načítania zisti, čo súbor obsahuje.</p>
+<span class="hint">Pomôcka: <code>whos -file moje_meranie.mat</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">U = 0:2:10;
+I = U / 470 * 1000;
+poznamka = 'meranie rezistora 470 Ohm';
+docasne = 42;                                 % tuto neulozime
+save('moje_meranie.mat', 'U', 'I', 'poznamka')
+whos -file moje_meranie.mat</pre>
+<pre class="out">Name          Size            Bytes  Class     Attributes
+
+  I             1x6                48  double              
+  U             1x6                48  double              
+  poznamka      1x25               50  char</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B2</span><div>
+<p>Vymaž workspace, načítaj <code>moje_meranie.mat</code> a vypíš poznámku a posledný prúd.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">clear
+load('moje_meranie.mat')
+poznamka
+I(end)</pre>
+<pre class="out">poznamka =
+    'meranie rezistora 470 Ohm'
+ans =
+   21.2766</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B3</span><div>
+<p>Načítaj ten istý súbor do <b>štruktúry</b> <code>S</code>. Vypíš mená jej položiek a vektor napätí.</p>
+<span class="hint">Pomôcka: <code>S = load(…)</code>, <code>fieldnames(S)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">S = load('moje_meranie.mat');
+fieldnames(S)
+S.U</pre>
+<pre class="out">ans =
+  3×1 cell array
+    {'I'       }
+    {'U'       }
+    {'poznamka'}
+ans =
+     0     2     4     6     8    10</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">B4</span><div>
+<p>Nastav <code>U = 999</code> a potom načítaj <code>moje_meranie.mat</code> príkazom <code>load</code> bez výstupnej premennej. Čo sa stalo s <code>U</code>?</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">U = 999;
+load('moje_meranie.mat')
+U
+% Povodna hodnota 999 zmizla bez varovania - preto je S = load(...) bezpecnejsie.</pre>
+<pre class="out">U =
+     0     2     4     6     8    10</pre>
+<div class="note"><code>load</code> bez výstupu <b>potichu prepíše</b> premenné s rovnakým menom. Hodnota 999 zmizla. Preto je <code>S = load(…)</code> bezpečnejšie.</div>
+</details></div>
+
+
+<h3>C · Čítanie dát</h3>
+
+<div class="task"><div class="q"><span class="num">C1</span><div>
+<p>Načítaj <code>data/ohm.csv</code> príkazom <code>readmatrix</code>, rozdeľ maticu na vektory <code>U</code> a <code>I</code> a nakresli ich ako body spojené čiarou.</p>
+<span class="hint">Pomôcka: <code>U = M(:, 1)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = readmatrix(fullfile('data', 'ohm.csv'));
+U = M(:, 1);
+I = M(:, 2);
+figure
+plot(U, I, 'o-')
+xlabel('U [V]'); ylabel('I [mA]')
+title('ohm.csv')
+% V mieste NaN (7 V) je v ciare medzera.</pre>
+<div class="fig"><img src="obrazky_cv05/C1.png" alt="Výstup úlohy C1" loading="lazy"></div>
+<div class="note">Pri 7 V v grafe chýba bod a čiara je prerušená. Prázdna bunka v súbore sa načítala ako <code>NaN</code> a <code>plot</code> ju vynechá.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C2</span><div>
+<p>Ten istý súbor načítaj ako <b>tabuľku</b>. Zobraz jej začiatok, mená stĺpcov a počet riadkov.</p>
+<span class="hint">Pomôcka: <code>readtable</code>, <code>head</code>, <code>T.Properties.VariableNames</code>, <code>height</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'ohm.csv'));
+head(T)
+T.Properties.VariableNames
+height(T)</pre>
+<pre class="out">U_V    I_mA 
+    ___    _____
+     0     -0.02
+     1      2.21
+     2      4.22
+     3      6.51
+     4      8.51
+     5     10.65
+     6      12.8
+     7       NaN
+ans =
+  1×2 cell array
+    {'U_V'}    {'I_mA'}
+ans =
+    13</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C3</span><div>
+<p>Z tabuľky vypíš: 5. hodnotu prúdu, riadky 2 až 4 ako <b>tabuľku</b> a tie isté riadky ako <b>čísla</b>. Zisti, akého typu sú oba výsledky.</p>
+<span class="hint">Pomôcka: <code>T(2:4, :)</code> vs. <code>T{2:4, :}</code>, typ zistí <code>class</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'ohm.csv'));
+T.I_mA(5)
+T(2:4, :)
+T{2:4, :}
+class(T(2:4, :))
+class(T{2:4, :})</pre>
+<pre class="out">ans =
+    8.5100
+ans =
+  3×2 table
+    U_V    I_mA
+    ___    ____
+     1     2.21
+     2     4.22
+     3     6.51
+ans =
+    1.0000    2.2100
+    2.0000    4.2200
+    3.0000    6.5100
+ans =
+    'table'
+ans =
+    'double'</pre>
+<div class="note">Okrúhle zátvorky vrátia kus <b>tabuľky</b>, zložené zátvorky vytiahnu <b>obsah</b> ako maticu čísel.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C4</span><div>
+<p>Súbor <code>data/ohm_excel.csv</code> je uložený zo slovenského Excelu. Načítaj ho najprv cez <code>readmatrix</code> bez nastavení a pozri sa na prvé riadky. Potom ho načítaj správne.</p>
+<span class="hint">Pomôcka: Otvor si súbor v Poznámkovom bloku: oddeľovač je <code>;</code> a desatinné miesta oddeľuje <code>,</code>. Pre <code>readtable</code> existujú parametre <code>'Delimiter'</code> a <code>'DecimalSeparator'</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = readmatrix(fullfile('data', 'ohm_excel.csv'));
+M(1:3, :)                                      % ZLE - druhy stlpec su NaN
+T = readtable(fullfile('data', 'ohm_excel.csv'), ...
+              'Delimiter', ';', 'DecimalSeparator', ',');
+T(1:3, :)                                      % spravne</pre>
+<pre class="out">ans =
+     0   NaN
+     1   NaN
+     2   NaN
+ans =
+  3×2 table
+    U_V    I_mA 
+    ___    _____
+     0     -0.02
+     1      2.21
+     2      4.22</pre>
+<div class="note">Bez nastavení MATLAB <b>nenahlási chybu</b>, ale prúdy sú <code>NaN</code>. Toto je najzradnejšia chyba pri čítaní dát: po načítaní si vždy pozri prvé riadky.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C5</span><div>
+<p>Načítaj záznam z osciloskopu <code>data/rc_osciloskop.csv</code>. Prvé 4 riadky nie sú dáta, preto ich preskoč. Zisti rozmer matice a nakresli napätie v čase (čas v ms).</p>
+<span class="hint">Pomôcka: <code>readmatrix(subor, 'NumHeaderLines', 4)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = readmatrix(fullfile('data', 'rc_osciloskop.csv'), 'NumHeaderLines', 4);
+size(M)
+t = M(:, 1);
+u = M(:, 2);
+figure
+plot(t*1000, u)
+xlabel('t [ms]'); ylabel('u [V]')
+title('Nabijanie kondenzatora - surove data')</pre>
+<pre class="out">ans =
+   501     2</pre>
+<div class="fig"><img src="obrazky_cv05/C5.png" alt="Výstup úlohy C5" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C6</span><div>
+<p>Prečítaj prvé štyri riadky toho istého súboru ako text. Z druhého riadku vytiahni údaj o vzorkovaní.</p>
+<span class="hint">Pomôcka: <code>readlines</code> vráti pole reťazcov po riadkoch, <code>split(retazec, ',')</code> ho rozdelí podľa čiarky.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">riadky = readlines(fullfile('data', 'rc_osciloskop.csv'));
+riadky(1:4)
+casti = split(riadky(2), ',')
+vzorkovanie = casti(2)</pre>
+<pre class="out">ans = 
+  4×1 string array
+    "Zariadenie,DSO-1052"
+    "Vzorkovanie,2000 Sa/s"
+    "Kanal,CH1"
+    "cas_s,napatie_V"
+casti = 
+  2×1 string array
+    "Vzorkovanie"
+    "2000 Sa/s"
+vzorkovanie = 
+    "2000 Sa/s"</pre>
+<div class="note">Hlavička prístroja nesie dôležité informácie o meraní. Práca s reťazcami z prednášky 3 sa tu hodí.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C7</span><div>
+<p>Zisti, aké hárky má zošit <code>data/teplota.xlsx</code>. Načítaj hárok <code>Meranie</code> (zisti jeho rozmer) a celý hárok <code>Info</code>.</p>
+<span class="hint">Pomôcka: <code>sheetnames</code>, <code>readtable(…, 'Sheet', 'Meranie')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">sheetnames(fullfile('data', 'teplota.xlsx'))
+T = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie');
+size(T)
+Info = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Info')</pre>
+<pre class="out">ans = 
+  2×1 string array
+    "Meranie"
+    "Info"
+ans =
+    96     3
+Info =
+  3×2 table
+     Polozka           Hodnota     
+    __________    _________________
+    {'Miesto'}    {'Strecha skoly'}
+    {'Datum' }    {'2026-11-10'   }
+    {'Senzor'}    {'DHT22'        }</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">C8</span><div>
+<p>Z hárka <code>Meranie</code> načítaj len oblasť <code>A1:B6</code>, teda hlavičku a prvých 5 meraní hodiny a teploty.</p>
+<span class="hint">Pomôcka: <code>'Range', 'A1:B6'</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T5 = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie', 'Range', 'A1:B6')</pre>
+<pre class="out">T5 =
+  5×2 table
+    Hodina    Teplota_C
+    ______    _________
+        0         10   
+     0.25          9   
+      0.5        9.9   
+     0.75        8.8   
+        1        8.8</pre>
+</details></div>
+
+
+<h3>D · Tabuľky s textom</h3>
+
+<div class="task"><div class="q"><span class="num">D1</span><div>
+<p>Načítaj <code>data/ziaci.csv</code>, zobraz prvých 5 riadkov, počet žiakov a typ stĺpca <code>Meno</code>.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+head(Z, 5)
+height(Z)
+class(Z.Meno)</pre>
+<pre class="out">Meno        Trieda     Body
+    __________    ________    ____
+    {'Adam'  }    {'4.D' }     78 
+    {'Beata' }    {'4.TL'}     91 
+    {'Daniel'}    {'4.D' }     45 
+    {'Eva'   }    {'4.TL'}     83 
+    {'Filip' }    {'4.D' }     67 
+ans =
+    16
+ans =
+    'cell'</pre>
+<div class="note">Textový stĺpec je pole <code>cell</code>. Text v ňom porovnávame cez <code>strcmp</code>, nie cez <code>==</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D2</span><div>
+<p>Vyber žiakov, ktorí majú aspoň 80 bodov, a zisti, koľko ich je.</p>
+<span class="hint">Pomôcka: <code>Z(Z.Body &gt;= 80, :)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+dobri = Z(Z.Body &gt;= 80, :)
+pocet = height(dobri)</pre>
+<pre class="out">dobri =
+  7×3 table
+       Meno        Trieda     Body
+    __________    ________    ____
+    {'Beata' }    {'4.TL'}     91 
+    {'Eva'   }    {'4.TL'}     83 
+    {'Ivan'  }    {'4.D' }     88 
+    {'Karol' }    {'4.D' }     94 
+    {'Nina'  }    {'4.TL'}     85 
+    {'Petra' }    {'4.TL'}     96 
+    {'Simona'}    {'4.TL'}     80 
+pocet =
+     7</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D3</span><div>
+<p>Vypočítaj priemerný počet bodov <b>každej triedy</b> a vypíš ho vetou aj s počtom žiakov.</p>
+<span class="hint">Pomôcka: <code>strcmp(Z.Trieda, '4.D')</code> vráti logický vektor.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+jeD  = strcmp(Z.Trieda, '4.D');
+jeTL = strcmp(Z.Trieda, '4.TL');
+fprintf('4.D : %.1f bodov (%d ziakov)\n', mean(Z.Body(jeD)),  sum(jeD));
+fprintf('4.TL: %.1f bodov (%d ziakov)\n', mean(Z.Body(jeTL)), sum(jeTL));</pre>
+<pre class="out">4.D : 66.5 bodov (8 ziakov)
+4.TL: 78.4 bodov (8 ziakov)</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D4</span><div>
+<p>Zoraď žiakov podľa bodov od najlepšieho a vypíš prvých troch.</p>
+<span class="hint">Pomôcka: <code>sortrows(Z, 'Body', 'descend')</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+Z = sortrows(Z, 'Body', 'descend');
+Z(1:3, :)</pre>
+<pre class="out">ans =
+  3×3 table
+      Meno        Trieda     Body
+    _________    ________    ____
+    {'Petra'}    {'4.TL'}     96 
+    {'Karol'}    {'4.D' }     94 
+    {'Beata'}    {'4.TL'}     91</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D5</span><div>
+<p>Pridaj do tabuľky stĺpec <code>Znamka</code> podľa stupnice: 90+ → 1, 75–89 → 2, 60–74 → 3, 45–59 → 4, menej → 5. Vypíš prvých 6 riadkov.</p>
+<span class="hint">Pomôcka: Najprv <code>Z.Znamka = zeros(height(Z), 1)</code>, potom do neho priraďuj cez logické indexovanie.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+Z.Znamka = zeros(height(Z), 1);
+Z.Znamka(Z.Body &gt;= 90)               = 1;
+Z.Znamka(Z.Body &gt;= 75 &amp; Z.Body &lt; 90) = 2;
+Z.Znamka(Z.Body &gt;= 60 &amp; Z.Body &lt; 75) = 3;
+Z.Znamka(Z.Body &gt;= 45 &amp; Z.Body &lt; 60) = 4;
+Z.Znamka(Z.Body &lt; 45)                = 5;
+Z(1:6, :)</pre>
+<pre class="out">ans =
+  6×4 table
+       Meno        Trieda     Body    Znamka
+    __________    ________    ____    ______
+    {'Adam'  }    {'4.D' }     78       2   
+    {'Beata' }    {'4.TL'}     91       1   
+    {'Daniel'}    {'4.D' }     45       4   
+    {'Eva'   }    {'4.TL'}     83       2   
+    {'Filip' }    {'4.D' }     67       3   
+    {'Hana'  }    {'4.TL'}     72       3</pre>
+<div class="note">Bez jediného cyklu — podmienka vyberie naraz všetkých žiakov, ktorým patrí daná známka.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">D6</span><div>
+<p>Nakresli stĺpcový graf bodov zoradených od najlepšieho, s menami na osi <i>x</i> a s vodorovnou čiarou na hranici úspechu 50 bodov.</p>
+<span class="hint">Pomôcka: <code>categorical(Z.Meno, Z.Meno)</code> zachová poradie z tabuľky.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+Z = sortrows(Z, 'Body', 'descend');
+figure
+bar(categorical(Z.Meno, Z.Meno), Z.Body)
+yline(50, '--')                       % hranica uspechu
+ylabel('body')
+title('Vysledky pisomky')</pre>
+<div class="fig"><img src="obrazky_cv05/D6.png" alt="Výstup úlohy D6" loading="lazy"></div>
+</details></div>
+
+
+<h3>E · Spracovanie dát</h3>
+
+<div class="task"><div class="q"><span class="num">E1</span><div>
+<p>Vypočítaj priemer prúdov v <code>ohm.csv</code> raz bežne a raz s vynechaním chýbajúcich hodnôt. Zisti, koľko hodnôt chýba a pri akom napätí.</p>
+<span class="hint">Pomôcka: <code>'omitnan'</code>, <code>isnan</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'ohm.csv'));
+mean(T.I_mA)
+mean(T.I_mA, 'omitnan')
+chyba = isnan(T.I_mA);
+sum(chyba)
+T.U_V(chyba)                     % pri akom napati hodnota chyba</pre>
+<pre class="out">ans =
+   NaN
+ans =
+   12.5917
+ans =
+     1
+ans =
+     7</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E2</span><div>
+<p>Odstráň z tabuľky <code>ohm.csv</code> všetky riadky, v ktorých niečo chýba. Porovnaj počet riadkov pred a po.</p>
+<span class="hint">Pomôcka: <code>rmmissing</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'ohm.csv'));
+pred = height(T)
+T = rmmissing(T);
+po = height(T)</pre>
+<pre class="out">pred =
+    13
+po =
+    12</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E3</span><div>
+<p>V meraní teploty (<code>teplota.xlsx</code>) zisti, koľko hodnôt chýba. Doplň ich lineárne a nakresli priebeh, v ktorom budú doplnené hodnoty vyznačené červeným bodom.</p>
+<span class="hint">Pomôcka: <code>[Tf, doplnene] = fillmissing(…, 'linear')</code>: druhý výstup je logický vektor doplnených miest.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie');
+pocetChyb = sum(isnan(T.Teplota_C))
+[Tf, doplnene] = fillmissing(T.Teplota_C, 'linear');
+figure
+plot(T.Hodina, Tf)
+hold on
+plot(T.Hodina(doplnene), Tf(doplnene), 'ro', 'MarkerFaceColor', 'r')
+hold off
+xlabel('hodina'); ylabel('T [C]')
+legend('teplota', 'doplnene hodnoty', 'Location', 'northwest')</pre>
+<pre class="out">pocetChyb =
+     3</pre>
+<div class="fig"><img src="obrazky_cv05/E3.png" alt="Výstup úlohy E3" loading="lazy"></div>
+<div class="note">Doplnená hodnota je <b>odhad</b>, nie meranie — v protokole to treba uviesť.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E4</span><div>
+<p>Vyhlaď napätie z osciloskopu kĺzavým priemerom s oknom 5, 25 a 151 bodov a porovnaj výsledky vedľa seba so surovými dátami.</p>
+<span class="hint">Pomôcka: <code>movmean(u, n)</code>, <code>tiledlayout(1, 3)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = readmatrix(fullfile('data', 'rc_osciloskop.csv'));
+t = M(:, 1) * 1000;
+u = M(:, 2);
+figure
+tiledlayout(1, 3, 'TileSpacing', 'compact')
+for n = [5 25 151]
+    nexttile
+    plot(t, u, 'Color', [0.75 0.75 0.75])
+    hold on
+    plot(t, movmean(u, n), 'LineWidth', 1.5)
+    hold off
+    title(sprintf('okno %d bodov', n))
+    xlim([0 120])
+end
+% Pri okne 151 bodov je krivka hladka, ale nabeh je rozmazany - priliz velke okno.</pre>
+<div class="fig"><img src="obrazky_cv05/E4.png" alt="Výstup úlohy E4" loading="lazy"></div>
+<div class="note">Malé okno šum takmer neodstráni. Príliš veľké okno krivku síce vyhladí, ale <b>rozmaže</b> rýchly nábeh, takže by sme zle odčítali časovú konštantu. Okno volíme ako kompromis.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E5</span><div>
+<p>Zisti najvyššiu a najnižšiu teplotu dňa a čas, kedy nastali. Čas vypíš vo formáte <code>hh:mm</code>.</p>
+<span class="hint">Pomôcka: <code>[Tmax, i] = max(…)</code>; z desatinných hodín: <code>floor(h)</code> sú hodiny, <code>mod(h, 1)*60</code> minúty.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie');
+[Tmax, imax] = max(T.Teplota_C);
+[Tmin, imin] = min(T.Teplota_C);
+h = T.Hodina(imax);
+fprintf('Maximum %.1f C o %02d:%02d\n', Tmax, floor(h), round(mod(h, 1)*60));
+h = T.Hodina(imin);
+fprintf('Minimum %.1f C o %02d:%02d\n', Tmin, floor(h), round(mod(h, 1)*60));</pre>
+<pre class="out">Maximum 22.9 C o 14:00
+Minimum 6.5 C o 02:45</pre>
+<div class="note"><code>max</code> a <code>min</code> chýbajúce hodnoty ignorujú samy, <code>'omitnan'</code> tu netreba.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E6</span><div>
+<p>Nakresli vlhkosť v závislosti od teploty bodovým grafom. Vypočítaj korelačný koeficient a zisti, či spolu súvisia.</p>
+<span class="hint">Pomôcka: <code>corrcoef</code> nefunguje s <code>NaN</code>, preto najprv <code>rmmissing</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie'));
+figure
+scatter(T.Teplota_C, T.Vlhkost_pct, 'filled')
+xlabel('teplota [C]'); ylabel('vlhkost [%]')
+K = corrcoef(T.Teplota_C, T.Vlhkost_pct);
+korelacia = K(1, 2)
+% Blizko -1: ked teplota rastie, relativna vlhkost klesa.</pre>
+<pre class="out">korelacia =
+   -0.9722</pre>
+<div class="fig"><img src="obrazky_cv05/E6.png" alt="Výstup úlohy E6" loading="lazy"></div>
+<div class="note">Koeficient blízko −1 znamená silnú <b>nepriamu</b> závislosť: keď teplota rastie, relatívna vlhkosť klesá. Fyzikálne to sedí, teplejší vzduch udrží viac vodnej pary.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">E7</span><div>
+<p>Z vyhladeného záznamu osciloskopu urči ustálené napätie a časovú konštantu τ: čas od zapnutia zdroja (20 ms) po dosiahnutie 63,2 % ustálenej hodnoty. Porovnaj s teóriou τ = <i>RC</i> = 10 kΩ · 4,7 μF.</p>
+<span class="hint">Pomôcka: <code>find(podmienka, 1)</code> vráti index prvého bodu, ktorý podmienku splní.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">M = readmatrix(fullfile('data', 'rc_osciloskop.csv'));
+t = M(:, 1);
+us = movmean(M(:, 2), 15);
+Uk  = mean(us(t &gt; 0.2));                     % ustalene napatie
+i0  = find(t &gt;= 0.02, 1);                    % zapnutie zdroja (20 ms)
+i63 = find(us &gt;= 0.632*Uk, 1);               % 63,2 % ustalenej hodnoty
+tau = t(i63) - t(i0);
+fprintf('Ustalene napatie: %.2f V\n', Uk);
+fprintf('Casova konstanta: %.1f ms (teoria R*C = 47 ms)\n', tau*1000);</pre>
+<pre class="out">Ustalene napatie: 4.93 V
+Casova konstanta: 45.5 ms (teoria R*C = 47 ms)</pre>
+<div class="note">Rozdiel asi 3 % je bežný, lebo kondenzátory mávajú toleranciu 10–20 %.</div>
+</details></div>
+
+
+<h3>F · Preloženie priamky — polyfit</h3>
+
+<div class="task"><div class="q"><span class="num">F1</span><div>
+<p>Prelož cez namerané body z <code>ohm.csv</code> priamku a z jej smernice vypočítaj odpor rezistora. Prúd je v mA.</p>
+<span class="hint">Pomôcka: Najprv <code>rmmissing</code>. Smernica <code>p(1)</code> je <i>I</i>/<i>U</i> v mA/V, teda <i>R</i> = 1000/<code>p(1)</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+p = polyfit(T.U_V, T.I_mA, 1)
+R = 1000 / p(1)</pre>
+<pre class="out">p =
+    2.1225    0.0333
+R =
+  471.1351</pre>
+<div class="note">Rezistor má nominálne 470 Ω. Z merania vyšlo 471,1 Ω, rozdiel je v tolerancii súčiastky.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F2</span><div>
+<p>Nakresli namerané body a preloženú priamku do jedného grafu. Do nadpisu daj vypočítaný odpor.</p>
+<span class="hint">Pomôcka: <code>polyval(p, x)</code> dopočíta body priamky.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+p = polyfit(T.U_V, T.I_mA, 1);
+R = 1000 / p(1);
+Ufit = linspace(0, 12, 100);
+figure
+plot(T.U_V, T.I_mA, 'o', 'MarkerFaceColor', 'b')
+hold on
+plot(Ufit, polyval(p, Ufit), 'r', 'LineWidth', 1.5)
+hold off
+xlabel('U [V]'); ylabel('I [mA]')
+title(sprintf('R = %.1f Ohm', R))
+legend('namerane', 'priamka', 'Location', 'northwest')
+grid on</pre>
+<div class="fig"><img src="obrazky_cv05/F2.png" alt="Výstup úlohy F2" loading="lazy"></div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F3</span><div>
+<p>Vypočítaj odchýlky nameraných prúdov od priamky, nájdi najväčšiu z nich a odchýlky nakresli cez <code>stem</code>.</p>
+<span class="hint">Pomôcka: <code>odchylky = I - polyval(p, U)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+p = polyfit(T.U_V, T.I_mA, 1);
+odchylky = T.I_mA - polyval(p, T.U_V);
+najvacsia = max(abs(odchylky))
+figure
+stem(T.U_V, odchylky, 'filled')
+yline(0)
+xlabel('U [V]'); ylabel('odchylka [mA]')
+title('Namerane minus priamka')</pre>
+<pre class="out">najvacsia =
+    0.1091</pre>
+<div class="fig"><img src="obrazky_cv05/F3.png" alt="Výstup úlohy F3" loading="lazy"></div>
+<div class="note">Odchýlky sú náhodne kladné aj záporné a bez trendu. To znamená, že priamka je správny model. Keby tvorili oblúk, závislosť by nebola lineárna.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F4</span><div>
+<p>Pomocou preloženej priamky odhadni prúd pri napätí 15 V a napätie, pri ktorom bude prúd 20 mA.</p>
+<span class="hint">Pomôcka: Z rovnice <i>I</i> = <i>a</i><i>U</i> + <i>b</i> vyjadri <i>U</i>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+p = polyfit(T.U_V, T.I_mA, 1);
+I15 = polyval(p, 15)                 % prud pri 15 V
+U20 = (20 - p(2)) / p(1)             % napatie pre prud 20 mA</pre>
+<pre class="out">I15 =
+   31.8713
+U20 =
+    9.4070</pre>
+<div class="note">Prúd pri 15 V je <b>extrapolácia</b>, lebo merali sme len do 12 V. Mimo rozsahu merania je odhad menej istý (rezistor sa napríklad zahreje).</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">F5</span><div>
+<p>Pre dáta <code>x = [0 0.5 1 1.5 2 2.5 3 3.5 4]</code> a <code>y = [1.1 1.4 2.2 3.0 4.9 6.8 10.1 12.9 17.2]</code> porovnaj vedľa seba preloženie polynómom stupňa 1, 2 a 8.</p>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">x = [0 0.5 1 1.5 2 2.5 3 3.5 4];
+y = [1.1 1.4 2.2 3.0 4.9 6.8 10.1 12.9 17.2];
+xx = linspace(0, 4, 200);
+figure
+tiledlayout(1, 3, 'TileSpacing', 'compact')
+for st = [1 2 8]
+    nexttile
+    plot(x, y, 'o')
+    hold on
+    plot(xx, polyval(polyfit(x, y, st), xx), 'LineWidth', 1.5)
+    hold off
+    title(sprintf('stupen %d', st))
+end</pre>
+<div class="fig"><img src="obrazky_cv05/F5.png" alt="Výstup úlohy F5" loading="lazy"></div>
+<div class="note">Stupeň 1 nevystihne zakrivenie. Stupeň 8 prejde každým bodom, ale vlní sa medzi nimi a kopíruje šum (<b>preučenie</b>). Najlepší je stupeň 2.</div>
+</details></div>
+
+
+<h3>G · Zápis výsledkov</h3>
+
+<div class="task"><div class="q"><span class="num">G1</span><div>
+<p>Pridaj do tabuľky žiakov stĺpec <code>Uspel</code> (aspoň 50 bodov) a ulož ju do <code>vysledky.csv</code>. Súbor potom načítaj späť a over jeho začiatok.</p>
+<span class="hint">Pomôcka: <code>writetable</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">Z = readtable(fullfile('data', 'ziaci.csv'));
+Z.Uspel = Z.Body &gt;= 50;
+writetable(Z, 'vysledky.csv');
+kontrola = readtable('vysledky.csv');
+head(kontrola, 4)</pre>
+<pre class="out">Meno        Trieda     Body    Uspel
+    __________    ________    ____    _____
+    {'Adam'  }    {'4.D' }     78       1  
+    {'Beata' }    {'4.TL'}     91       1  
+    {'Daniel'}    {'4.D' }     45       0  
+    {'Eva'   }    {'4.TL'}     83       1</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G2</span><div>
+<p>Z tabuľky <code>ohm.csv</code> vypočítaj odpor z <b>každého</b> bodu zvlášť (zaokrúhlený na 0,1 Ω). Riadky 2 až 4 ulož ako CSV pre <b>slovenský Excel</b>, teda s bodkočiarkou a desatinnou čiarkou.</p>
+<span class="hint">Pomôcka: <code>writetable(…, 'Delimiter', ';')</code> nastaví oddeľovač. Desatinnú čiarku zapísať nevie: súbor načítaj ako text (<code>fileread</code>), bodky nahraď čiarkami (<code>strrep</code>) a zapíš späť.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+T.R_Ohm = round(1000 * T.U_V ./ T.I_mA, 1);  % odpor z kazdeho bodu zvlast
+writetable(T(2:4, :), 'ohm_pre_excel.csv', 'Delimiter', ';');
+txt = fileread('ohm_pre_excel.csv');
+txt = strrep(txt, '.', ',');                  % desatinna ciarka pre slovensky Excel
+fid = fopen('ohm_pre_excel.csv', 'w');
+fprintf(fid, '%s', txt);
+fclose(fid);
+type ohm_pre_excel.csv</pre>
+<pre class="out">U_V;I_mA;R_Ohm
+1;2,21;452,5
+2;4,22;473,9
+3;6,51;460,8</pre>
+<div class="note">Pri 1 V vyšlo <i>R</i> = 452,5 Ω, pri 2 V 473,9 Ω. Pri malom prúde má šum najväčší vplyv, preto je výpočet z jedného bodu nespoľahlivý a <code>polyfit</code> cez všetky body je lepší.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G3</span><div>
+<p>Ulož maticu so stĺpcami <i>U</i> = 0 až 3 V a príslušnými prúdmi do <code>matica.csv</code> a vypíš obsah súboru.</p>
+<span class="hint">Pomôcka: <code>writematrix</code>, výpis súboru: <code>type matica.csv</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">U = (0:3)';
+I = U / 470 * 1000;
+writematrix([U I], 'matica.csv');
+type matica.csv</pre>
+<pre class="out">0,0
+1,2.12765957446809
+2,4.25531914893617
+3,6.38297872340426</pre>
+<div class="note"><code>writematrix</code> nezapisuje hlavičku. Keď ju potrebuješ, použi tabuľku a <code>writetable</code>.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G4</span><div>
+<p>Vytvor textový protokol <code>protokol.txt</code>: nadpis, počet meraní, vypočítaný odpor a malú tabuľku prvých troch meraní so zarovnanými stĺpcami.</p>
+<span class="hint">Pomôcka: <code>fid = fopen(…, 'w')</code>, <code>fprintf(fid, …)</code>, <code>fclose(fid)</code>; zarovnanie: <code>'%6.1f %8.2f\n'</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+p = polyfit(T.U_V, T.I_mA, 1);
+fid = fopen('protokol.txt', 'w');
+fprintf(fid, 'PROTOKOL - meranie odporu\n');
+fprintf(fid, 'Pocet merani: %d\n', height(T));
+fprintf(fid, 'Odpor: R = %.1f Ohm\n\n', 1000/p(1));
+fprintf(fid, '%6s %8s\n', 'U [V]', 'I [mA]');
+for k = 1:3
+    fprintf(fid, '%6.1f %8.2f\n', T.U_V(k), T.I_mA(k));
+end
+fclose(fid);
+type protokol.txt</pre>
+<pre class="out">PROTOKOL - meranie odporu
+Pocet merani: 12
+Odpor: R = 471.1 Ohm
+
+ U [V]   I [mA]
+   0.0    -0.02
+   1.0     2.21
+   2.0     4.22</pre>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G5</span><div>
+<p>Doplň na koniec protokolu riadok s menom autora tak, aby sa doterajší obsah nezmazal.</p>
+<span class="hint">Pomôcka: Režim <code>'a'</code> (append) namiesto <code>'w'</code>.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">fid = fopen('protokol.txt', 'a');
+fprintf(fid, '\nVypracoval: Jano Student\n');
+fclose(fid);
+type protokol.txt</pre>
+<pre class="out">PROTOKOL - meranie odporu
+Pocet merani: 12
+Odpor: R = 471.1 Ohm
+
+ U [V]   I [mA]
+   0.0    -0.02
+   1.0     2.21
+   2.0     4.22
+
+Vypracoval: Jano Student</pre>
+<div class="note">Režim <code>'w'</code> by súbor najprv vyprázdnil a ostal by v ňom len posledný riadok.</div>
+</details></div>
+
+<div class="task"><div class="q"><span class="num">G6</span><div>
+<p>Nakresli meranie z <code>ohm.csv</code> a ulož graf ako PNG s rozlíšením 200 dpi. Over, že súbor vznikol.</p>
+<span class="hint">Pomôcka: <code>exportgraphics(gcf, 'ohm_graf.png', 'Resolution', 200)</code></span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = rmmissing(readtable(fullfile('data', 'ohm.csv')));
+figure
+plot(T.U_V, T.I_mA, 'o-')
+xlabel('U [V]'); ylabel('I [mA]')
+exportgraphics(gcf, 'ohm_graf.png', 'Resolution', 200);
+isfile('ohm_graf.png')</pre>
+<pre class="out">ans =
+  logical
+   1</pre>
+<div class="fig"><img src="obrazky_cv05/G6.png" alt="Výstup úlohy G6" loading="lazy"></div>
+</details></div>
+
+
+<h3>H · Bonusová úloha</h3>
+
+<div class="task"><div class="q"><span class="num">H1</span><div>
+<p>Spracuj celodenné meranie teploty: (1) doplň chýbajúce hodnoty, (2) vypočítaj 24 hodinových priemerov, (3) nakresli ich ako stĺpce spolu s pôvodným priebehom, (4) priemery ulož do <code>hodinove.csv</code> a do <code>suhrn.txt</code> zapíš priemer dňa a najteplejšiu hodinu.</p>
+<span class="hint">Pomôcka: Každú hodinu tvoria 4 merania: <code>reshape(T.Teplota_C, 4, 24)</code> ich dá do stĺpcov a <code>mean</code> spriemeruje každý stĺpec.</span>
+</div></div>
+<details><summary>Ukázať riešenie</summary>
+<pre class="code">T = readtable(fullfile('data', 'teplota.xlsx'), 'Sheet', 'Meranie');
+T.Teplota_C = fillmissing(T.Teplota_C, 'linear');          % 1. vycistit
+hodinove = mean(reshape(T.Teplota_C, 4, 24))';             % 2. 4 merania = 1 hodina
+hodina = (0:23)';
+figure                                                     % 3. vykreslit
+bar(hodina, hodinove, 'FaceAlpha', 0.5)
+hold on
+plot(T.Hodina, T.Teplota_C, 'LineWidth', 1.2)
+hold off
+xlabel('hodina'); ylabel('T [C]')
+legend('hodinovy priemer', 'meranie', 'Location', 'northwest')
+title('Teplota na streche skoly')
+writetable(table(hodina, hodinove), 'hodinove.csv');       % 4. ulozit
+fid = fopen('suhrn.txt', 'w');
+fprintf(fid, 'Priemer dna: %.1f C\n', mean(T.Teplota_C));
+fprintf(fid, 'Najteplejsia hodina: %d. (%.1f C)\n', ...
+        hodina(hodinove == max(hodinove)), max(hodinove));
+fclose(fid);
+type suhrn.txt</pre>
+<pre class="out">Priemer dna: 15.0 C
+Najteplejsia hodina: 14. (22.4 C)</pre>
+<div class="fig"><img src="obrazky_cv05/H1.png" alt="Výstup úlohy H1" loading="lazy"></div>
+<div class="note">Toto je kostra skoro každého spracovania merania: <b>načítať → vyčistiť → spracovať → vykresliť → uložiť</b>.</div>
+</details></div>
+
+<!-- /LEKCIA 5 -->
+
 <footer>
-  MATLAB — cvičenia k prednáškam 1 a 2 · SPŠE Karola Adlera 5
+  MATLAB — cvičenia k prednáškam 1 až 5 · SPŠE Karola Adlera 5
 </footer>
 
 </main>
